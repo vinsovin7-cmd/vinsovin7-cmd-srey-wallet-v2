@@ -1,0 +1,1882 @@
+import React, { useState, useEffect } from 'react';
+import { TonConnectButton, useTonAddress, useTonWallet, useIsConnectionRestored } from '@tonconnect/ui-react';
+import CelestialTimelineCinema from './components/CelestialTimelineCinema';
+import BybitGoogleAuthModal from './components/BybitGoogleAuthModal';
+import { HeroScene, QuantumComputerScene } from './components/QuantumScene';
+import { SurfaceCodeDiagram, TransformerDecoderDiagram, PerformanceMetricDiagram } from './components/Diagrams';
+import { EcosystemDashboard } from './components/EcosystemDashboard';
+import { MailStudioSuite } from './components/MailStudioSuite';
+import { ScoMonetizationSuite } from './components/ScoMonetizationSuite';
+import { SolscanSuite } from './components/SolscanSuite';
+import { OfficialTelegramSuite, OFFICIAL_TELEGRAM_APK_URL } from './components/OfficialTelegramSuite';
+import { ExternalTransactionIntegration } from './components/ExternalTransactionIntegration';
+import { SreymaraAppzInstaller } from './components/SreymaraAppzInstaller';
+import { AdminControlPalace } from './components/AdminControlPalace';
+import { ViralGuestRegisterModal } from './components/ViralGuestRegisterModal';
+import { YouTubeCinemaVideoSuite } from './components/YouTubeCinemaVideoSuite';
+import { CloudflareDomainManager } from './components/CloudflareDomainManager';
+import { GoogleVisitorSignInModal, VisitorRecord } from './components/GoogleVisitorSignInModal';
+import { EcosystemVisitorRecordsSuite } from './components/EcosystemVisitorRecordsSuite';
+import { DatingArtsMatchmakingSuite } from './components/DatingArtsMatchmakingSuite';
+import { AndroidAppInstallerModal } from './components/AndroidAppInstallerModal';
+import { WebsiteToAppConverter } from './components/WebsiteToAppConverter';
+import { AdsGramTonPayoutSuite } from './components/AdsGramTonPayoutSuite';
+import { PortableMiniCinemaEcosystem } from './components/PortableMiniCinemaEcosystem';
+import { SreymaraQueenConversationalAI } from './components/SreymaraQueenConversationalAI';
+import { CrossBorderPaymentGatewaySuite } from './components/CrossBorderPaymentGatewaySuite';
+import { CoinbaseAgentMcpSuite } from './components/CoinbaseAgentMcpSuite';
+import { FranzMultiMessengerWrapper } from './components/FranzMultiMessengerWrapper';
+import { CommunityEcosystemHub } from './components/CommunityEcosystemHub';
+import { TonSettlementPipelineSuite } from './components/TonSettlementPipelineSuite';
+import { TonSettlementEngineWidget } from './components/TonSettlementEngineWidget';
+import { GeminiFundsSettlementSuite } from './components/GeminiFundsSettlementSuite';
+import GeoTargetingSocialMonetizationSuite from './components/GeoTargetingSocialMonetizationSuite';
+import SecurityIncidentGuardian from './components/SecurityIncidentGuardian';
+import { EcosystemSentinelAntiMalwareGuardian } from './components/EcosystemSentinelAntiMalwareGuardian';
+import GoogleGeminiEcosystemSuite from './components/GoogleGeminiEcosystemSuite';
+import { EmbeddedFifteenOriginalAppsSuite } from './components/EmbeddedFifteenOriginalAppsSuite';
+import { SreyWalletApp } from './components/SreyWallet/SreyWalletApp';
+import { VercelDeploymentHub } from './components/VercelDeploymentHub';
+import { LitmatchLandingPage } from './components/LitmatchLandingPage';
+import { TelegramMiniEcosystemWidget } from './components/TelegramMiniEcosystemWidget';
+import { GoogleExecutiveAccountSuite } from './components/GoogleExecutiveAccountSuite';
+import { googleSignIn, getActiveGoogleSession } from './src/lib/firebaseAuth';
+import { ShoppingBag, Mail, Sparkles, BookOpen, Layers, Globe, ShieldCheck, Activity, X, Eye, EyeOff, Maximize2, Minimize2, Coins, GitBranch, Wallet, Zap, Send, ExternalLink, Download, Share2, ChevronDown, ChevronUp, Grid, Smartphone, Crown, Lock, Video, Film, Users, UserCheck, Heart, Usb, Star, Mic, Bot, Building2, CreditCard, TrendingUp, MessageSquare, Radio, Cpu } from 'lucide-react';
+
+const AuthorCard = ({ name, role, delay }: { name: string, role: string, delay: string }) => {
+  return (
+    <div className="flex flex-col group animate-fade-in-up items-center p-8 bg-stone-900/90 rounded-2xl border border-stone-800/80 shadow-2xl hover:shadow-amber-900/20 transition-all duration-300 w-full max-w-xs hover:border-nobel-gold/50" style={{ animationDelay: delay }}>
+      <h3 className="font-serif text-2xl text-stone-100 text-center mb-3">{name}</h3>
+      <div className="w-12 h-0.5 bg-nobel-gold mb-4 opacity-70"></div>
+      <p className="text-xs text-stone-400 font-bold uppercase tracking-widest text-center leading-relaxed">{role}</p>
+    </div>
+  );
+};
+
+// 7 CELESTIAL STARS LUXURY MATRIX
+const SEVEN_COLOR_STARS = [
+  { id: "gold", name: "Solar Gold", color: "#FFD700", meaning: "Sovereign Treasury & Payout Security" },
+  { id: "ruby", name: "Kinetic Ruby", color: "#EF4444", meaning: "Real-time Verification & 80/20 Distribution" },
+  { id: "emerald", name: "Emerald TON", color: "#10B981", meaning: "TON Jetton & USDT Smart Contracts" },
+  { id: "sapphire", name: "Sapphire Azure", color: "#3B82F6", meaning: "Deep Quantum Ecosystem Stability" },
+  { id: "amethyst", name: "Amethyst Violet", color: "#A855F7", meaning: "Sreymara Palace Royalty & AI Guard" },
+  { id: "diamond", name: "Diamond Cyan", color: "#06B6D4", meaning: "Cryptographic Purity & 0.1% Fee Shield" },
+  { id: "topaz", name: "Imperial Topaz", color: "#F59E0B", meaning: "Infinite Yield Micro-Earnings Engine" }
+];
+
+export function triggerTripleEcosystemAdFlow(actionType: string) {
+  if (typeof (window as any).show_11896240 === 'function') {
+    (window as any).show_11896240()
+      .then(() => {})
+      .catch(() => {});
+  }
+  if (typeof (window as any).recordEcosystemActivity === 'function') {
+    (window as any).recordEcosystemActivity();
+    (window as any).recordEcosystemActivity();
+    (window as any).recordEcosystemActivity(); // Accelerated counter boost
+  }
+}
+if (typeof window !== 'undefined') {
+  (window as any).triggerTripleEcosystemAdFlow = triggerTripleEcosystemAdFlow;
+}
+
+function TonWalletHeaderWidget() {
+  const userAddress = useTonAddress();
+  const wallet = useTonWallet();
+  const connectionRestored = useIsConnectionRestored();
+  const [showBybitAuthModal, setShowBybitAuthModal] = useState(false);
+  const [isGoogleSigningIn, setIsGoogleSigningIn] = useState(false);
+  const [authStatus, setAuthStatus] = useState<string | null>(() => {
+    return localStorage.getItem("google_account_email") || localStorage.getItem("bybit_account_email") || null;
+  });
+
+  const handleDirectGoogleLogin = async () => {
+    setIsGoogleSigningIn(true);
+    try {
+      const user = await googleSignIn();
+      if (user && user.email) {
+        setAuthStatus(user.email);
+      }
+    } catch (err: any) {
+      console.warn("Google sign-in popup note:", err?.message || err);
+    } finally {
+      setIsGoogleSigningIn(false);
+    }
+  };
+
+  useEffect(() => {
+    if (userAddress) {
+      localStorage.setItem("ton_connected_address", userAddress);
+      triggerTripleEcosystemAdFlow("TON_WALLET_CONNECTED");
+    }
+  }, [userAddress]);
+
+  return (
+    <div className="flex items-center gap-2 flex-wrap">
+      {/* Official Bybit Multi-Auth Gateway Button */}
+      <button
+        type="button"
+        onClick={() => setShowBybitAuthModal(true)}
+        className="px-2.5 py-2 bg-gradient-to-r from-amber-600 via-amber-500 to-yellow-500 hover:from-amber-500 hover:to-yellow-400 text-black font-extrabold text-xs rounded-xl shadow-lg flex items-center gap-1.5 cursor-pointer transition-all active:scale-95"
+        title="Login with Bybit account or Google SSO"
+      >
+        <span>₿</span>
+        <span className="hidden sm:inline">Bybit Gateway</span>
+      </button>
+
+      {/* TON Connect Button (Telegram Wallet, Tonkeeper, Bybit Wallet, Gram Wallet, etc.) */}
+      <div className="flex items-center gap-1 bg-[#12151E] px-2 py-1 rounded-xl border border-stone-800">
+        <TonConnectButton />
+      </div>
+
+      {showBybitAuthModal && (
+        <BybitGoogleAuthModal
+          onClose={() => setShowBybitAuthModal(false)}
+          onSuccess={(info) => {
+            setAuthStatus(info.email);
+            setShowBybitAuthModal(false);
+            if (typeof (window as any).triggerTripleEcosystemAdFlow === 'function') {
+              (window as any).triggerTripleEcosystemAdFlow("BYBIT_OFFICIAL_AUTH");
+            }
+          }}
+        />
+      )}
+    </div>
+  );
+}
+
+const App: React.FC = () => {
+  const [selectedStar, setSelectedStar] = useState<typeof SEVEN_COLOR_STARS[0] | null>(null);
+  const [activeMainTab, setActiveMainTab] = useState<"srey_wallet" | "google_gemini" | "community_hub" | "franz_messenger" | "web_to_app" | "adsgram_ton" | "ton_settlement" | "revenue" | "ton_wallet" | "external_api" | "cross_border_payments" | "coinbase_mcp" | "telegram_auth" | "solscan" | "sco_monetization" | "mail_ai" | "sreymara_appz" | "quantum" | "admin_palace" | "cinema_video" | "cloudflare" | "visitor_records" | "datingarts" | "litmatch">((): any => {
+    if (typeof window !== "undefined") {
+      const pathname = window.location.pathname.toLowerCase();
+      const hash = window.location.hash.toLowerCase();
+      const href = window.location.href.toLowerCase();
+      // Dedicated Litmatch Clone landing page detection (#litmatch, /litmatch)
+      if (hash.includes("litmatch") || pathname.includes("litmatch")) {
+        return "litmatch";
+      }
+      // Dedicated Srey TMA Wallet route detection (#srey, #srey_wallet, /srey, etc.)
+      if (hash.includes("srey") || hash.includes("srey_wallet") || hash.includes("srey-wallet") || pathname.includes("srey") || href.includes("srey")) {
+        return "srey_wallet";
+      }
+      if (hash.includes("gemini") || hash.includes("google") || hash.includes("ai_chat") || pathname.includes("gemini")) {
+        return "google_gemini";
+      }
+      if (hash.includes("settle") || hash.includes("pipeline") || hash.includes("tonviewer") || hash.includes("ton_pipe")) {
+        return "ton_settlement";
+      }
+      if (hash.includes("community") || hash.includes("zealy") || hash.includes("galxe") || hash.includes("tma") || hash.includes("quest")) {
+        return "community_hub";
+      }
+      // Dedicated Franz Multi-Messenger URL detection (/franz or #franz)
+      if (pathname.startsWith("/franz") || pathname.startsWith("/messenger") || hash.includes("franz") || hash.includes("messenger") || hash.includes("webview")) {
+        return "franz_messenger";
+      }
+      if (hash.includes("coinbase") || hash.includes("mcp") || hash.includes("cdp") || hash.includes("base_mcp")) return "coinbase_mcp";
+      if (hash.includes("cross_border") || hash.includes("ach") || hash.includes("banking") || hash.includes("payments") || hash.includes("wise") || hash.includes("stripe")) return "cross_border_payments";
+      if (hash.includes("adsgram") || hash.includes("payout") || hash.includes("ton_payout")) return "adsgram_ton";
+      if (hash.includes("converter") || hash.includes("web_to_app") || hash.includes("admob") || hash.includes("apk")) return "web_to_app";
+      if (hash.includes("dating") || hash.includes("matchmaking") || hash.includes("datingarts")) return "datingarts";
+      if (hash.includes("visitor") || hash.includes("records") || hash.includes("google_signin")) return "visitor_records";
+      if (hash.includes("cloudflare") || hash.includes("domain") || hash.includes("earnings")) return "cloudflare";
+      if (hash.includes("cinema") || hash.includes("youtube") || hash.includes("video")) return "cinema_video";
+      if (hash.includes("love_suite") || href.includes("invite=") || hash.includes("guest")) return "telegram_auth";
+      if (hash.includes("admin_palace") || hash.includes("palace") || hash.includes("admin")) return "admin_palace";
+      if (hash.includes("sreymara_appz") || hash.includes("appz") || hash.includes("apps")) return "sreymara_appz";
+      if (hash.includes("ton_wallet") || hash.includes("wallet")) return "ton_wallet";
+      if (hash.includes("external_api") || hash.includes("api")) return "external_api";
+      if (hash.includes("telegram_auth") || hash.includes("telegram")) return "telegram_auth";
+      if (hash.includes("solscan") || hash.includes("solana")) return "solscan";
+      if (hash.includes("sco_monetization") || hash.includes("sco")) return "sco_monetization";
+      if (hash.includes("mail_ai") || hash.includes("mail")) return "mail_ai";
+      if (hash.includes("revenue") || hash.includes("dashboard")) return "revenue";
+      if (hash.includes("quantum")) return "quantum";
+      const saved = localStorage.getItem("alphaqubit_active_main_tab");
+      if (saved && saved !== "franz_messenger") return saved as any;
+    }
+    return "web_to_app";
+  });
+
+  const [isGuestLoveSuiteOnly, setIsGuestLoveSuiteOnly] = useState<boolean>(() => {
+    if (typeof window !== "undefined") {
+      const href = window.location.href.toLowerCase();
+      return href.includes("love_suite") || href.includes("invite=") || href.includes("guest");
+    }
+    return false;
+  });
+
+  const [showRegisterModal, setShowRegisterModal] = useState<boolean>(() => {
+    if (typeof window !== "undefined") {
+      const href = window.location.href.toLowerCase();
+      return href.includes("love_suite") || href.includes("invite=") || href.includes("guest");
+    }
+    return false;
+  });
+  const [showGoogleSignInModal, setShowGoogleSignInModal] = useState<boolean>(false);
+  const [showAndroidInstallerModal, setShowAndroidInstallerModal] = useState<boolean>(false);
+  const [showUrlNavigatorModal, setShowUrlNavigatorModal] = useState<boolean>(false);
+  // Guarantee UI is always visible on fresh render and never permanently collapsed
+  const [isTabHidden, setIsTabHidden] = useState<boolean>(false);
+  const [isNavBannerHidden, setIsNavBannerHidden] = useState<boolean>(false);
+  const [isSreymaraAgentOpen, setIsSreymaraAgentOpen] = useState<boolean>(() => {
+    try {
+      const saved = localStorage.getItem("alphaqubit_sreymara_agent_open");
+      if (saved !== null) {
+        return saved === "true";
+      }
+    } catch {}
+    return false; // Stays hidden / collapsed until user explicitly clicks to show it
+  });
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem("alphaqubit_sreymara_agent_open", String(isSreymaraAgentOpen));
+    } catch {}
+  }, [isSreymaraAgentOpen]);
+
+  useEffect(() => {
+    localStorage.setItem("alphaqubit_active_main_tab", activeMainTab);
+    if (activeMainTab === "franz_messenger") {
+      if (window.location.pathname !== "/franz") {
+        window.history.replaceState(null, "", "/franz");
+      }
+    } else {
+      if (window.location.pathname === "/franz") {
+        window.history.replaceState(null, "", `/#${activeMainTab}`);
+      } else if (window.location.hash !== `#${activeMainTab}`) {
+        window.history.replaceState(null, "", `#${activeMainTab}`);
+      }
+    }
+  }, [activeMainTab]);
+
+  useEffect(() => {
+    localStorage.setItem("alphaqubit_is_tab_hidden", String(isTabHidden));
+  }, [isTabHidden]);
+
+  useEffect(() => {
+    localStorage.setItem("alphaqubit_nav_banner_hidden", String(isNavBannerHidden));
+  }, [isNavBannerHidden]);
+
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash.replace("#", "").toLowerCase();
+      const pathname = window.location.pathname.toLowerCase();
+      if (hash.includes("community") || hash.includes("zealy") || hash.includes("galxe") || hash.includes("tma") || hash.includes("quest")) {
+        setActiveMainTab("community_hub");
+        setIsTabHidden(false);
+      }
+      else if (pathname.startsWith("/franz") || pathname.startsWith("/messenger") || hash.includes("franz") || hash.includes("messenger") || hash.includes("webview")) {
+        setActiveMainTab("franz_messenger");
+        setIsTabHidden(false);
+      }
+      else if (pathname.includes("/admin") || hash === "admin_palace" || hash === "admin" || hash === "palace" || hash === "master_admin") {
+        setActiveMainTab("admin_palace");
+        setIsTabHidden(false);
+      }
+      else if (hash === "coinbase_mcp" || hash === "coinbase" || hash === "mcp" || hash === "cdp" || hash === "wallet_mcp") setActiveMainTab("coinbase_mcp");
+      else if (hash === "cross_border_payments" || hash === "cross_border" || hash === "payments" || hash === "ach" || hash === "banking") setActiveMainTab("cross_border_payments");
+      else if (hash === "ton_settlement" || hash === "settle" || hash === "pipeline" || hash === "tonviewer") {
+        setActiveMainTab("ton_settlement");
+        setIsTabHidden(false);
+      }
+      else if (hash === "adsgram_ton" || hash === "adsgram" || hash === "payout" || hash === "ton_payout") setActiveMainTab("adsgram_ton");
+      else if (hash === "web_to_app" || hash === "converter" || hash === "website_to_app" || hash === "admob" || hash === "apk") setActiveMainTab("web_to_app");
+      else if (hash === "ton_wallet" || hash === "wallet" || hash === "ton") setActiveMainTab("ton_wallet");
+      else if (hash === "external_api" || hash === "api" || hash === "external") setActiveMainTab("external_api");
+      else if (hash === "telegram_auth" || hash === "telegram" || hash === "tg_auth") setActiveMainTab("telegram_auth");
+      else if (hash === "solscan" || hash === "solana") setActiveMainTab("solscan");
+      else if (hash === "mail_ai" || hash === "mail" || hash === "ai") setActiveMainTab("mail_ai");
+      else if (hash === "cinema_video" || hash === "cinema" || hash === "youtube") setActiveMainTab("cinema_video");
+      else if (hash === "cloudflare" || hash === "domain") setActiveMainTab("cloudflare");
+      else if (hash === "sreymara_appz" || hash === "appz" || hash === "apps") setActiveMainTab("sreymara_appz");
+      else if (hash === "datingarts" || hash === "dating") setActiveMainTab("datingarts");
+      else if (hash === "litmatch" || hash === "litmatchapp") setActiveMainTab("litmatch");
+      else if (hash === "visitor_records" || hash === "records") setActiveMainTab("visitor_records");
+      else if (hash === "sco_monetization" || hash === "sco") setActiveMainTab("sco_monetization");
+      else if (hash === "revenue" || hash === "dashboard") setActiveMainTab("revenue");
+      else if (hash === "quantum") setActiveMainTab("quantum");
+    };
+
+    // Check on initial mount as well
+    handleHashChange();
+
+    window.addEventListener("hashchange", handleHashChange);
+    window.addEventListener("popstate", handleHashChange);
+    return () => {
+      window.removeEventListener("hashchange", handleHashChange);
+      window.removeEventListener("popstate", handleHashChange);
+    };
+  }, []);
+
+  // BULLETPROOF INBUILD FRAME GUARD: Intercept all external link clicks so NOTHING opens outside
+  useEffect(() => {
+    const handleGlobalLinkClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement | null;
+      const anchor = target?.closest("a") as HTMLAnchorElement | null;
+      if (anchor) {
+        const href = anchor.getAttribute("href") || "";
+        // If external link or target _blank, intercept and keep inside ecosystem!
+        if (anchor.target === "_blank" || href.startsWith("http://") || href.startsWith("https://")) {
+          // If anchor is inside an iframe, allow iframe internal handling
+          if (anchor.closest("iframe")) return;
+
+          e.preventDefault();
+          e.stopPropagation();
+
+          if (href.includes("telegram") || href.includes("t.me")) {
+            setActiveMainTab("telegram_auth");
+            setIsTabHidden(false);
+          } else if (href.includes("solscan") || href.includes("solana")) {
+            setActiveMainTab("solscan");
+            setIsTabHidden(false);
+          } else if (href.includes("apk") || href.endsWith(".apk")) {
+            setShowAndroidInstallerModal(true);
+          } else if (href.includes("converter") || href.includes("webtoapp")) {
+            setActiveMainTab("web_to_app");
+            setIsTabHidden(false);
+          } else if (href.includes("adsgram") || href.includes("payout")) {
+            setActiveMainTab("adsgram_ton");
+            setIsTabHidden(false);
+          } else {
+            setActiveMainTab("sreymara_appz");
+            setIsTabHidden(false);
+          }
+        }
+      }
+    };
+    document.addEventListener("click", handleGlobalLinkClick, true);
+    return () => document.removeEventListener("click", handleGlobalLinkClick, true);
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 50);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+    return () => document.removeEventListener("fullscreenchange", handleFullscreenChange);
+  }, []);
+
+  const toggleAppFullscreen = () => {
+    try {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch((err) => {
+          console.warn("Fullscreen request failed:", err);
+          setIsFullscreen(true);
+        });
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    } catch (e) {
+      console.warn("Fullscreen API not available:", e);
+      setIsFullscreen(!isFullscreen);
+    }
+  };
+
+  const scrollToSection = (id: string) => (e: React.MouseEvent) => {
+    e.preventDefault();
+    const element = document.getElementById(id);
+    if (element) {
+      const headerOffset = 100;
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth"
+      });
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-[#05060A] text-stone-100 selection:bg-nobel-gold selection:text-black font-sans relative p-1 sm:p-2.5">
+      {/* LUXURIOUS BOLD BUILD FRAME WITH 7-COLOR STARS */}
+      <div className="relative rounded-[24px] sm:rounded-[32px] border-[3px] sm:border-4 border-amber-500/50 shadow-[0_0_80px_rgba(245,158,11,0.22)] bg-[#090A0E] overflow-hidden min-h-[calc(100vh-1rem)] flex flex-col ring-1 ring-amber-400/20">
+        
+        {/* CELESTIAL CROWN WITH LUXURIOUS HIDDEN 7-COLOR STARS */}
+        <div className="w-full bg-gradient-to-r from-[#12072B] via-[#090A14] to-[#14082D] border-b border-amber-500/30 px-3 sm:px-6 py-2 flex items-center justify-between flex-wrap gap-2 text-xs select-none">
+          <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1">
+              <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+              <span className="w-2 h-2 rounded-full bg-amber-400"></span>
+            </div>
+            <span className="font-serif font-black tracking-widest text-amber-300 text-[10px] sm:text-xs uppercase flex items-center gap-1.5">
+              <span>★ SREMARA LUXURY BUILD FRAME</span>
+              <span className="text-stone-600">•</span>
+              <span className="text-emerald-400 font-mono font-normal hidden sm:inline">BULLETPROOF INBUILD ECOSYSTEM</span>
+            </span>
+          </div>
+
+          {/* HIDDEN 7-COLOR CELESTIAL STARS */}
+          <div className="flex items-center gap-2 sm:gap-3 bg-black/70 px-3 py-1 rounded-full border border-amber-500/30 shadow-inner">
+            <span className="text-[10px] font-mono text-stone-400 uppercase hidden md:inline">7 Celestial Stars:</span>
+            {SEVEN_COLOR_STARS.map((star, idx) => (
+              <button
+                key={idx}
+                onClick={() => setSelectedStar(star)}
+                className="group relative flex items-center justify-center p-1 rounded-full hover:bg-white/10 transition-all cursor-pointer focus:outline-none"
+                title={`${star.name}: ${star.meaning} (Click to inspect star power)`}
+              >
+                <Star
+                  size={13}
+                  style={{ color: star.color, fill: star.color }}
+                  className="transition-transform group-hover:scale-135 drop-shadow-[0_0_6px_currentColor] animate-pulse"
+                />
+                {/* Reveal label */}
+                <div className="absolute top-8 left-1/2 -translate-x-1/2 bg-black/95 text-stone-200 border border-stone-700 px-2.5 py-1 rounded-lg text-[10px] whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity z-50 pointer-events-none shadow-2xl font-mono">
+                  <div className="font-bold" style={{ color: star.color }}>{star.name}</div>
+                  <div className="text-stone-400 text-[9px]">{star.meaning}</div>
+                </div>
+              </button>
+            ))}
+          </div>
+
+          <div className="flex items-center gap-2">
+            <span className="px-2 py-0.5 bg-emerald-950/80 border border-emerald-500/50 text-emerald-300 rounded text-[10px] font-mono font-bold flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span>100% EMBEDDED ECOSYSTEM</span>
+            </span>
+          </div>
+        </div>
+
+        {/* Security Incident Guardian & Threat Neutralization Monitor */}
+        <SecurityIncidentGuardian />
+        <EcosystemSentinelAntiMalwareGuardian />
+
+        {/* EXECUTIVE TOP NAVIGATION HEADER */}
+        <header className="sticky top-0 z-40 bg-[#090A0E]/95 backdrop-blur-md border-b border-stone-800 py-3.5 px-6 shadow-2xl">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+          
+          {/* Brand, Hide Tab Control & Live System Status */}
+          <div className="flex items-center gap-3">
+            {/* GOOGLE EXECUTIVE AUTH SUITE (36 Apps Waffle & Profile Popup at Top-Left) */}
+            <GoogleExecutiveAccountSuite
+              onOpenAdminPanel={() => setActiveMainTab("admin_palace")}
+            />
+
+            {/* HIDE TAB BUTTON (Positioned exactly as requested in user screenshot to the left of the α emblem) */}
+            <button
+              id="btn-hide-tab-header"
+              type="button"
+              onClick={() => setIsTabHidden(!isTabHidden)}
+              className={`px-3.5 py-2 rounded-xl text-xs font-black tracking-wider uppercase transition-all flex items-center gap-1.5 shadow-lg border cursor-pointer shrink-0 ${
+                isTabHidden
+                  ? "bg-emerald-950 text-emerald-300 border-emerald-500 hover:bg-emerald-900 ring-2 ring-emerald-500/40 animate-pulse"
+                  : "bg-red-950/90 text-red-200 border-red-700/80 hover:bg-red-900 hover:text-white"
+              }`}
+              title={isTabHidden ? "Show and restore foreground workspace" : "Hide this interface and view what is at the back"}
+            >
+              {isTabHidden ? (
+                <>
+                  <Eye size={15} className="text-emerald-400" />
+                  <span>SHOW TAB</span>
+                </>
+              ) : (
+                <>
+                  <EyeOff size={15} className="text-red-400" />
+                  <span>HIDE TAB</span>
+                </>
+              )}
+            </button>
+
+            <div className="w-9 h-9 bg-nobel-gold rounded-xl flex items-center justify-center text-stone-950 font-serif font-bold text-2xl shadow-lg shrink-0">
+              α
+            </div>
+            <div>
+              <h1 className="font-serif font-bold text-lg tracking-wide text-white flex items-center gap-2">
+                AlphaQubit Quantum Ecosystem <span className="text-nobel-gold font-normal">2024</span>
+              </h1>
+              <div className="flex items-center gap-2 flex-wrap">
+                <p className="text-xs text-stone-400 flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+                  <span>Shopify ID: 5144661590b... • Mail.com Proxy Connected</span>
+                </p>
+                <button
+                  onClick={() => window.open("https://ais-pre-yri2x2xif26llxnhpuguzk-152195627325.asia-east1.run.app", "_blank", "noopener,noreferrer")}
+                  className="px-2.5 py-0.5 rounded bg-emerald-950/90 hover:bg-emerald-900 border border-emerald-500/70 text-emerald-300 font-mono text-[10px] font-bold flex items-center gap-1 cursor-pointer transition shadow"
+                  title="Open standalone public web link without Google AI Studio or 404"
+                >
+                  <ExternalLink size={10} />
+                  <span>Open Standalone Tab ↗</span>
+                </button>
+                <button
+                  onClick={() => setShowUrlNavigatorModal(true)}
+                  className="px-2 py-0.5 rounded bg-sky-950/80 hover:bg-sky-900 border border-sky-500/50 text-sky-300 font-mono text-[10px] font-bold flex items-center gap-1 cursor-pointer transition-colors"
+                  title="View and copy distinct browser URLs for AlphaQubit Ecosystem & Franz Messenger"
+                >
+                  <Share2 size={10} />
+                  <span>Dual URLs</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3 flex-wrap">
+            <VercelDeploymentHub />
+            <TonWalletHeaderWidget />
+          </div>
+
+          {/* Main Top Navigation Banner OR Collapsed V Toggle Button */}
+          {isNavBannerHidden ? (
+            /* COLLAPSED VIEW: Minimal high-visibility "V" toggle button to display the full navigation banner */
+            <div className="flex items-center gap-2">
+              <button
+                id="btn-show-full-nav-banner"
+                type="button"
+                onClick={() => setIsNavBannerHidden(false)}
+                className="px-4 py-2.5 bg-gradient-to-r from-red-950 via-purple-950 to-amber-950 hover:from-red-900 hover:to-amber-900 text-white rounded-xl text-xs font-black flex items-center gap-2.5 transition-all shadow-2xl border-2 border-red-500/80 cursor-pointer animate-pulse"
+                title="Click V or button to display full navigation banner (Shopify + Tidio, Telegram @Wallet, External API, etc.)"
+              >
+                <ChevronDown size={18} className="text-amber-300 font-black animate-bounce" />
+                <span className="text-amber-400 font-extrabold text-sm">▼</span>
+                <span className="tracking-wide">DISPLAY NAVIGATION BANNER</span>
+                <span className="px-2 py-0.5 bg-red-900 text-red-100 rounded text-[10px] font-mono border border-red-500 font-black">V</span>
+              </button>
+            </div>
+          ) : (
+            /* EXPANDED VIEW: Full Navigation Banner carrying all 11 quick-access tabs + V Hide Button at the far right ending */
+            <div className="flex items-center gap-2 bg-[#12151E] p-1.5 rounded-xl border border-stone-800 flex-wrap relative shadow-2xl">
+              {/* Sreymara Queen Live Conversational AI Agent (Vertex AI & Gemini SDK) */}
+              <button
+                id="btn-nav-sreymara-conversational"
+                onClick={() => {
+                  setIsSreymaraAgentOpen(true);
+                  setIsTabHidden(false);
+                }}
+                className="px-3.5 py-2 rounded-lg text-xs font-black transition-all flex items-center gap-1.5 cursor-pointer border shadow-lg bg-gradient-to-r from-blue-600 via-sky-600 to-indigo-600 text-white border-sky-300 ring-2 ring-sky-400/50 hover:brightness-110 animate-pulse"
+                title="Open Sreymara Queen Live Conversational Agent with Vertex AI & Gemini Mic Speech Sync"
+              >
+                <Crown size={14} className="text-amber-300" />
+                <span>Sreymara Queen AI</span>
+                <span className="px-1.5 py-0.2 bg-emerald-400 text-stone-950 rounded text-[9px] font-black uppercase flex items-center gap-0.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-stone-950 animate-ping" />
+                  LIVE MIC
+                </span>
+              </button>
+
+              {/* Google Gemini AI & Google Accounts Suite */}
+              <button
+                id="btn-nav-google-gemini"
+                onClick={() => {
+                  setActiveMainTab("google_gemini");
+                  setIsTabHidden(false);
+                }}
+                className={`px-3.5 py-2 rounded-lg text-xs font-black transition-all flex items-center gap-1.5 cursor-pointer border shadow-lg ${
+                  activeMainTab === "google_gemini" && !isTabHidden
+                    ? "bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white border-sky-300 ring-2 ring-sky-400/50"
+                    : "bg-slate-900/90 text-sky-300 hover:text-white border-slate-700 hover:border-sky-400"
+                }`}
+                title="Open Google Gemini AI Workspace & Official Google Accounts Login"
+              >
+                <Sparkles size={14} className="text-sky-300 fill-sky-300" />
+                <span>Google Gemini</span>
+                <span className="px-1.5 py-0.2 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded text-[9px] font-black uppercase">GOOGLE AI</span>
+              </button>
+
+              {/* Sreymara Community Hub, TMAs & Zealy/Galxe Quests Tab */}
+              <button
+                id="btn-nav-community-hub"
+                onClick={() => {
+                  setActiveMainTab("community_hub");
+                  setIsTabHidden(false);
+                }}
+                className={`px-3.5 py-2 rounded-lg text-xs font-black transition-all flex items-center gap-1.5 cursor-pointer border shadow-lg ${
+                  activeMainTab === "community_hub" && !isTabHidden
+                    ? "bg-gradient-to-r from-amber-500 via-emerald-600 to-teal-500 text-stone-950 border-amber-300 ring-2 ring-emerald-400/50"
+                    : "bg-amber-950/60 text-amber-300 hover:text-white border-amber-700/70"
+                }`}
+                title="Zealy/Galxe Community Quests, Telegram Channels, 4 Autonomous TMAs & TON Payouts"
+              >
+                <Sparkles size={14} className="text-amber-400" />
+                <span>Community & TMAs</span>
+                <span className="px-1.5 py-0.2 bg-emerald-400 text-stone-950 rounded text-[9px] font-black uppercase">ZEALY / TON</span>
+              </button>
+
+              {/* Franz Multi-Messenger Core Wrapper & Isolated Webview Engine Tab */}
+              <button
+                id="btn-nav-franz-messenger"
+                onClick={() => {
+                  setActiveMainTab("franz_messenger");
+                  setIsTabHidden(false);
+                }}
+                className={`px-3.5 py-2 rounded-lg text-xs font-black transition-all flex items-center gap-1.5 cursor-pointer border shadow-lg ${
+                  activeMainTab === "franz_messenger" && !isTabHidden
+                    ? "bg-gradient-to-r from-sky-600 via-blue-600 to-indigo-600 text-white border-sky-300 ring-2 ring-sky-400/50"
+                    : "bg-sky-950/70 text-sky-200 hover:text-white border-sky-700/80"
+                }`}
+                title="Franz Multi-Messenger Electron Core Wrapper with Isolated Webview Containers & Owner Bypass"
+              >
+                <MessageSquare size={14} className="text-sky-300" />
+                <span>Franz Messenger OS</span>
+                <span className="px-1.5 py-0.2 bg-amber-400 text-stone-950 rounded text-[9px] font-black uppercase">OWNER VIP</span>
+              </button>
+
+              {/* Primary Google Play Website to App Converter Tab */}
+              <button
+                id="btn-nav-web-to-app"
+                onClick={() => {
+                  setActiveMainTab("web_to_app");
+                  setIsTabHidden(false);
+                }}
+                className={`px-3.5 py-2 rounded-lg text-xs font-black transition-all flex items-center gap-1.5 cursor-pointer border shadow-lg ${
+                  activeMainTab === "web_to_app" && !isTabHidden
+                    ? "bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 text-white border-blue-400 ring-2 ring-blue-500/40"
+                    : "bg-blue-950/70 text-blue-300 hover:text-white border-blue-800/80"
+                }`}
+                title="Google Play Convert Website to App (com.webtoapp.converter) with AdMob & APK Generator"
+              >
+                <Globe size={14} className="text-blue-300" />
+                <span>Website to App</span>
+                <span className="px-1.5 py-0.2 bg-[#00C853] text-white rounded text-[9px] font-extrabold uppercase">PLAY STORE</span>
+              </button>
+
+              {/* AdsGram & TON Micro-Payouts Studio Tab (80/20 Split & 0.1% Fee) */}
+              <button
+                id="btn-nav-adsgram-ton"
+                onClick={() => {
+                  setActiveMainTab("adsgram_ton");
+                  setIsTabHidden(false);
+                }}
+                className={`px-3.5 py-2 rounded-lg text-xs font-black transition-all flex items-center gap-1.5 cursor-pointer border shadow-lg ${
+                  activeMainTab === "adsgram_ton" && !isTabHidden
+                    ? "bg-gradient-to-r from-emerald-600 via-cyan-600 to-blue-600 text-white border-cyan-400 ring-2 ring-cyan-500/40"
+                    : "bg-emerald-950/70 text-emerald-300 hover:text-white border-emerald-800/80"
+                }`}
+                title="AdsGram SDK & TON Automated USDT Micro-Payouts (80/20 Split & 0.1% Fee)"
+              >
+                <Zap size={14} className="text-amber-400" />
+                <span>AdsGram & TON Payouts</span>
+                <span className="px-1.5 py-0.2 bg-emerald-500 text-stone-950 rounded text-[9px] font-extrabold uppercase">80/20 USDT</span>
+              </button>
+
+              {/* TON Settlement Pipeline & Explorer Gateway Tab */}
+              <button
+                id="btn-nav-ton-settlement"
+                onClick={() => {
+                  setActiveMainTab("ton_settlement");
+                  setIsTabHidden(false);
+                }}
+                className={`px-3.5 py-2 rounded-lg text-xs font-black transition-all flex items-center gap-1.5 cursor-pointer border shadow-lg ${
+                  activeMainTab === "ton_settlement" && !isTabHidden
+                    ? "bg-gradient-to-r from-blue-600 via-cyan-600 to-teal-600 text-white border-cyan-300 ring-2 ring-cyan-400/50"
+                    : "bg-blue-950/70 text-cyan-200 hover:text-white border-blue-800/80"
+                }`}
+                title="TON Blockchain Yield Settlement Pipeline, On-Chain Memos & Tonviewer Explorer"
+              >
+                <Cpu size={14} className="text-cyan-400 animate-pulse" />
+                <span>Gemini Funds & TON Pipeline</span>
+                <span className="px-1.5 py-0.2 bg-cyan-400 text-stone-950 rounded text-[9px] font-black uppercase">AI SETTLEMENT</span>
+              </button>
+
+              <button
+                onClick={() => {
+                  setActiveMainTab("revenue");
+                  setIsTabHidden(false);
+                }}
+                className={`px-3 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                  activeMainTab === "revenue" && !isTabHidden
+                    ? "bg-amber-600 text-white shadow-lg border border-amber-400/50"
+                    : "text-stone-400 hover:text-white"
+                }`}
+              >
+                <ShoppingBag size={14} className="text-amber-300" />
+                <span>Shopify + Tidio</span>
+              </button>
+
+              <button
+                onClick={() => {
+                  setActiveMainTab("ton_wallet");
+                  setIsTabHidden(false);
+                }}
+                className={`px-3 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                  activeMainTab === "ton_wallet" && !isTabHidden
+                    ? "bg-gradient-to-r from-cyan-600 via-blue-600 to-cyan-700 text-white font-black shadow-lg border border-cyan-400"
+                    : "text-stone-400 hover:text-cyan-300"
+                }`}
+              >
+                <Wallet size={14} className="text-cyan-400" />
+                <span>Telegram @Wallet</span>
+                <span className="px-1.5 py-0.5 bg-emerald-950 text-emerald-300 rounded text-[9px] font-mono border border-emerald-700 font-bold">USDT</span>
+              </button>
+
+              {/* 15 Embedded Original Apps Nav Button */}
+              <button
+                id="btn-nav-original-apps"
+                onClick={() => {
+                  setIsTabHidden(false);
+                  const el = document.getElementById("embedded_15_apps");
+                  if (el) {
+                    el.scrollIntoView({ behavior: "smooth" });
+                  }
+                }}
+                className="px-3.5 py-2 rounded-lg text-xs font-black transition-all flex items-center gap-1.5 cursor-pointer border shadow-lg bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-600 text-stone-950 border-amber-300 ring-2 ring-amber-400/40"
+                title="15 Embedded Original Apps (TikTok, Facebook, X, Telegram, YouTube, Spotify, PayPal, Chase, Notion, etc.)"
+              >
+                <span>📱</span>
+                <span>15 Original Apps</span>
+                <span className="px-1.5 py-0.2 bg-stone-950 text-amber-300 rounded text-[9px] font-black uppercase">EMBEDDED</span>
+              </button>
+
+              {/* Litmatch Official Landing Page Rebuild Tab */}
+              <button
+                id="btn-nav-litmatch"
+                onClick={() => {
+                  setActiveMainTab("litmatch");
+                  setIsTabHidden(false);
+                }}
+                className={`px-3.5 py-2 rounded-lg text-xs font-black transition-all flex items-center gap-1.5 cursor-pointer border shadow-lg ${
+                  activeMainTab === "litmatch" && !isTabHidden
+                    ? "bg-gradient-to-r from-purple-600 via-[#8F6DEF] to-indigo-600 text-white border-purple-300 ring-2 ring-purple-400/50"
+                    : "bg-purple-950/70 text-purple-200 hover:text-white border-purple-800/80"
+                }`}
+                title="Litmatch Official Landing Page (React + Tailwind CSS Rebuild with Exact Purple Scheme)"
+              >
+                <span>👾</span>
+                <span>Litmatch</span>
+                <span className="px-1.5 py-0.2 bg-[#8F6DEF] text-white rounded text-[9px] font-black uppercase">REBUILD</span>
+              </button>
+
+              {/* Dedicated Cross-Border Payments & Banking Architecture Button */}
+              <button
+                id="btn-nav-cross-border"
+                onClick={() => {
+                  setActiveMainTab("cross_border_payments");
+                  setIsTabHidden(false);
+                }}
+                className={`px-3 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer border shadow-lg ${
+                  activeMainTab === "cross_border_payments" && !isTabHidden
+                    ? "bg-gradient-to-r from-amber-500 via-emerald-600 to-teal-600 text-stone-950 font-black border-amber-300 ring-2 ring-emerald-400/40"
+                    : "bg-[#0F1420] text-amber-300 hover:text-white border-amber-500/40"
+                }`}
+                title="Cross-Border Payments (Stripe Connect, Wise, Flutterwave, ACH Timelines & Virtual Accounts)"
+              >
+                <Building2 size={14} className="text-amber-400" />
+                <span>Cross-Border Banking</span>
+                <span className="px-1.5 py-0.5 bg-emerald-950 text-emerald-300 rounded text-[9px] font-mono border border-emerald-700 font-bold">ACH • NGN</span>
+              </button>
+
+              {/* Dedicated Coinbase MCP (Coinbase Trading, Wallet MCP, CDP MCP) */}
+              <button
+                id="btn-nav-coinbase-mcp"
+                onClick={() => {
+                  setActiveMainTab("coinbase_mcp");
+                  setIsTabHidden(false);
+                }}
+                className={`px-3 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer border shadow-lg ${
+                  activeMainTab === "coinbase_mcp" && !isTabHidden
+                    ? "bg-gradient-to-r from-blue-600 via-indigo-600 to-sky-500 text-white font-black border-blue-400 ring-2 ring-blue-400/40"
+                    : "bg-[#0B101D] text-blue-300 hover:text-white border-blue-500/30"
+                }`}
+                title="Coinbase for Agents (Coinbase Trading MCP, Wallet MCP Base DeFi, CDP CLI MCP)"
+              >
+                <TrendingUp size={14} className="text-blue-400" />
+                <span>Coinbase MCP</span>
+                <span className="px-1.5 py-0.5 bg-blue-950 text-blue-300 rounded text-[9px] font-mono border border-blue-700 font-bold">3 MCPs</span>
+              </button>
+
+              {/* Dedicated External Systems Transaction Integration Button */}
+              <button
+                id="btn-nav-external-api"
+                onClick={() => {
+                  setActiveMainTab("external_api");
+                  setIsTabHidden(false);
+                }}
+                className={`px-3 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                  activeMainTab === "external_api" && !isTabHidden
+                    ? "bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-500 text-stone-950 font-black shadow-lg border border-emerald-400"
+                    : "text-stone-400 hover:text-emerald-300"
+                }`}
+                title="External Systems Transaction API Gateway (Authenticated with Key 5dd2...ecb2)"
+              >
+                <Share2 size={14} className="text-emerald-400" />
+                <span>External API</span>
+                <span className="px-1.5 py-0.5 bg-emerald-950 text-emerald-300 rounded text-[9px] font-mono border border-emerald-700 font-bold">5dd2</span>
+              </button>
+
+              {/* DatingArts Matchmaking Suite Button */}
+              <button
+                id="btn-nav-datingarts"
+                onClick={() => {
+                  setActiveMainTab("datingarts");
+                  setIsTabHidden(false);
+                }}
+                className={`px-3 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                  activeMainTab === "datingarts" && !isTabHidden
+                    ? "bg-gradient-to-r from-pink-600 via-rose-600 to-amber-500 text-white font-black shadow-lg border border-pink-400"
+                    : "text-stone-400 hover:text-pink-300"
+                }`}
+                title="DatingArts Luxury Matchmaking & 100% Human Interaction Chat"
+              >
+                <Heart size={14} className="text-pink-400 fill-pink-400" />
+                <span>DatingArts Matchmaking</span>
+                <span className="px-1.5 py-0.5 bg-pink-950 text-pink-300 rounded text-[9px] font-mono border border-pink-700 font-bold">100% REAL</span>
+              </button>
+
+              <button
+                onClick={() => {
+                  setActiveMainTab("telegram_auth");
+                  setIsTabHidden(false);
+                }}
+                className={`px-3 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                  activeMainTab === "telegram_auth" && !isTabHidden
+                    ? "bg-gradient-to-r from-sky-600 via-blue-600 to-sky-700 text-white font-black shadow-lg border border-sky-400"
+                    : "text-stone-400 hover:text-sky-300"
+                }`}
+              >
+                <Send size={14} className="text-sky-400" />
+                <span>Telegram Ecosystem</span>
+                <span className="px-1.5 py-0.5 bg-sky-950 text-sky-300 rounded text-[9px] font-mono border border-sky-700 font-bold">CLIENT</span>
+              </button>
+
+              {/* Bulletproof Embedded "Launch Telegram Web" Quick-Access Button */}
+              <button
+                id="btn-launch-telegram-web"
+                type="button"
+                onClick={() => {
+                  setActiveMainTab("telegram_auth");
+                  setIsTabHidden(false);
+                }}
+                className="px-3 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer bg-sky-950/70 hover:bg-sky-900/90 text-sky-300 hover:text-white border border-sky-700/80 shadow-sm whitespace-nowrap"
+                title="Launch Official Telegram Web (Embedded In-Ecosystem Client)"
+              >
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-sky-500"></span>
+                </span>
+                <span>Launch Telegram Web</span>
+                <span className="px-1.5 py-0.2 bg-sky-900 text-sky-200 rounded text-[9px] font-mono uppercase">IN-APP</span>
+              </button>
+
+              {/* Bulletproof Embedded Telegram Android APK Installer */}
+              <button
+                id="btn-nav-download-telegram-apk"
+                type="button"
+                onClick={() => {
+                  setShowAndroidInstallerModal(true);
+                }}
+                className="px-3 py-2 rounded-lg text-xs font-black transition-all flex items-center gap-1.5 cursor-pointer bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 hover:from-amber-400 hover:to-amber-500 text-stone-950 shadow-sm border border-amber-400 whitespace-nowrap"
+                title="Install Official Telegram Android APK (In-Ecosystem Android Runner)"
+              >
+                <Download size={13} />
+                <span>Telegram APK</span>
+                <span className="px-1.5 py-0.2 bg-black/30 text-stone-100 rounded text-[9px] font-mono">EMBEDDED</span>
+              </button>
+
+              <button
+                onClick={() => {
+                  setActiveMainTab("solscan");
+                  setIsTabHidden(false);
+                }}
+                className={`px-3 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                  activeMainTab === "solscan" && !isTabHidden
+                    ? "bg-gradient-to-r from-emerald-600 via-teal-600 to-[#00FFA3] text-black font-black shadow-lg border border-[#00FFA3]"
+                    : "text-stone-400 hover:text-[#00FFA3]"
+                }`}
+              >
+                <span className="w-2 h-2 rounded-full bg-[#00FFA3] animate-pulse"></span>
+                <span className="font-mono font-bold tracking-tight">Solscan.io</span>
+                <span className="px-1.5 py-0.5 bg-black/80 text-[#00FFA3] rounded text-[9px] font-mono border border-[#00FFA3]/40 font-bold">FAST RELAY</span>
+              </button>
+
+              <button
+                onClick={() => {
+                  setActiveMainTab("sco_monetization");
+                  setIsTabHidden(false);
+                }}
+                className={`px-3 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                  activeMainTab === "sco_monetization" && !isTabHidden
+                    ? "bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 text-stone-950 font-black shadow-lg border border-amber-300"
+                    : "text-stone-400 hover:text-white"
+                }`}
+              >
+                <Coins size={14} className="text-amber-400" />
+                <span>SCO Monetization & Blockchain</span>
+              </button>
+
+              <button
+                onClick={() => {
+                  setActiveMainTab("mail_ai");
+                  setIsTabHidden(false);
+                }}
+                className={`px-3 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                  activeMainTab === "mail_ai" && !isTabHidden
+                    ? "bg-purple-900 text-purple-100 shadow-lg border border-purple-600"
+                    : "text-stone-400 hover:text-white"
+                }`}
+              >
+                <Mail size={14} className="text-purple-300" />
+                <Sparkles size={11} className="text-amber-400" />
+                <span>Mail.com & Multi Sreymara AI</span>
+              </button>
+
+              <button
+                id="btn-nav-cinema-video"
+                onClick={() => {
+                  setActiveMainTab("cinema_video");
+                  setIsTabHidden(false);
+                }}
+                className={`px-3.5 py-2 rounded-lg text-xs font-black transition-all flex items-center gap-1.5 cursor-pointer border shadow-lg ${
+                  activeMainTab === "cinema_video" && !isTabHidden
+                    ? "bg-gradient-to-r from-red-600 via-amber-500 to-purple-600 text-white border-amber-300 ring-2 ring-amber-400/50"
+                    : "bg-gradient-to-r from-red-950/80 to-purple-950/80 text-amber-300 border-red-500/50 hover:text-white"
+                }`}
+                title="YouTube Monetization & Cinema 4K AI Video Generator (15 Presets)"
+              >
+                <Film size={15} className="text-amber-400" />
+                <span>YouTube & Cinema 4K Video</span>
+                <span className="px-1.5 py-0.2 bg-red-600 text-white rounded text-[9px] font-extrabold uppercase">15 AI HD</span>
+              </button>
+
+              <button
+                id="btn-nav-cloudflare"
+                onClick={() => {
+                  setActiveMainTab("cloudflare");
+                  setIsTabHidden(false);
+                }}
+                className={`px-3.5 py-2 rounded-lg text-xs font-black transition-all flex items-center gap-1.5 cursor-pointer border shadow-lg ${
+                  activeMainTab === "cloudflare" && !isTabHidden
+                    ? "bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 text-stone-950 border-orange-300 ring-2 ring-orange-400/50"
+                    : "bg-gradient-to-r from-orange-950/80 to-purple-950/80 text-orange-300 border-orange-500/50 hover:text-white"
+                }`}
+                title="Cloudflare Domain Integration Manager (earnings.ink)"
+              >
+                <Globe size={15} className="text-orange-400" />
+                <span>Cloudflare earnings.ink</span>
+                <span className="px-1.5 py-0.2 bg-orange-500 text-stone-950 rounded text-[9px] font-extrabold uppercase">DNS</span>
+              </button>
+
+              {/* 👑 SREY WALLET TELEGRAM MINI APP (TMA) BUTTON */}
+              <button
+                id="btn-nav-srey-wallet"
+                onClick={() => {
+                  setActiveMainTab("srey_wallet");
+                  setIsTabHidden(false);
+                }}
+                className={`px-3.5 py-2 rounded-lg text-xs font-black transition-all flex items-center gap-1.5 cursor-pointer border shadow-lg ${
+                  activeMainTab === "srey_wallet" && !isTabHidden
+                    ? "bg-gradient-to-r from-amber-400 via-yellow-500 to-amber-500 text-stone-950 border-amber-200 ring-2 ring-amber-400/60 shadow-[0_0_20px_rgba(245,158,11,0.5)]"
+                    : "bg-gradient-to-r from-stone-900 via-amber-950/40 to-stone-900 text-amber-300 border-amber-500/50 hover:text-white hover:border-amber-400"
+                }`}
+                title="Open Standalone Srey Wallet TMA (Non-Custodial Web3 Crypto Dashboard)"
+              >
+                <span className="text-sm">👑</span>
+                <span>Srey Wallet</span>
+                <span className="px-1.5 py-0.2 bg-amber-400 text-stone-950 rounded text-[9px] font-extrabold uppercase">TMA</span>
+              </button>
+
+              <button
+                id="btn-nav-admin-palace"
+                onClick={() => {
+                  setActiveMainTab("admin_palace");
+                  setIsTabHidden(false);
+                }}
+                className={`px-3.5 py-2 rounded-lg text-xs font-black transition-all flex items-center gap-1.5 cursor-pointer border shadow-lg ${
+                  activeMainTab === "admin_palace" && !isTabHidden
+                    ? "bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 text-stone-950 border-amber-300 ring-2 ring-amber-400/50"
+                    : "bg-gradient-to-r from-amber-950/60 to-purple-950/80 text-amber-300 border-amber-500/50 hover:text-white"
+                }`}
+                title="Ecosystem Control Palace Admin Home"
+              >
+                <Crown size={15} className="text-amber-400" />
+                <span>Admin Control Palace</span>
+                <span className="px-1.5 py-0.2 bg-amber-400 text-stone-950 rounded text-[9px] font-extrabold uppercase">HOME</span>
+              </button>
+
+              <button
+                id="btn-nav-sreymara-appz"
+                onClick={() => {
+                  setActiveMainTab("sreymara_appz");
+                  setIsTabHidden(false);
+                }}
+                className={`px-3 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                  activeMainTab === "sreymara_appz" && !isTabHidden
+                    ? "bg-gradient-to-r from-amber-500 via-pink-600 to-purple-600 text-white font-black shadow-lg border border-amber-300 ring-2 ring-pink-500/40"
+                    : "text-purple-300 hover:text-white bg-purple-950/40 border border-purple-800/60"
+                }`}
+                title="sreymara APPZ Ecosystem App Installer"
+              >
+                <Smartphone size={14} className="text-amber-300" />
+                <span>sreymara APPZ</span>
+                <span className="px-1.5 py-0.2 bg-amber-400 text-stone-950 rounded text-[9px] font-extrabold uppercase">INSTALLER</span>
+              </button>
+
+              <button
+                onClick={() => {
+                  setActiveMainTab("quantum");
+                  setIsTabHidden(false);
+                }}
+                className={`px-3 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                  activeMainTab === "quantum" && !isTabHidden
+                    ? "bg-stone-800 text-stone-100 shadow-lg border border-stone-700"
+                    : "text-stone-400 hover:text-white"
+                }`}
+              >
+                <BookOpen size={14} className="text-sky-400" />
+                <span>AlphaQubit Paper</span>
+              </button>
+
+              {/* GOOGLE VISITOR SIGN-IN & RECORDS TAB */}
+              <button
+                id="btn-nav-visitor-records"
+                onClick={() => {
+                  setActiveMainTab("visitor_records");
+                  setIsTabHidden(false);
+                }}
+                className={`px-3.5 py-2 rounded-lg text-xs font-black transition-all flex items-center gap-1.5 cursor-pointer border shadow-lg ${
+                  activeMainTab === "visitor_records" && !isTabHidden
+                    ? "bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white border-blue-300 ring-2 ring-blue-400/50"
+                    : "bg-gradient-to-r from-blue-950/80 to-indigo-950/80 text-blue-300 border-blue-500/50 hover:text-white"
+                }`}
+                title="Google Visitor Sign-In & Ecosystem Records Management Registry"
+              >
+                <Users size={15} className="text-blue-400" />
+                <span>Google Visitor Records</span>
+                <span className="px-1.5 py-0.2 bg-blue-500 text-white rounded text-[9px] font-extrabold uppercase">SSO</span>
+              </button>
+
+              <button
+                id="btn-trigger-google-modal"
+                onClick={() => setShowGoogleSignInModal(true)}
+                className="px-3.5 py-2 bg-white hover:bg-stone-100 text-stone-900 font-extrabold rounded-lg text-xs shadow-xl transition-all cursor-pointer flex items-center gap-2 border border-stone-300"
+                title="Open Google Visitor Sign-In Modal"
+              >
+                <svg className="w-4 h-4" viewBox="0 0 24 24">
+                  <path
+                    fill="#4285F4"
+                    d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                  />
+                  <path
+                    fill="#34A853"
+                    d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                  />
+                  <path
+                    fill="#FBBC05"
+                    d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"
+                  />
+                  <path
+                    fill="#EA4335"
+                    d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
+                  />
+                </svg>
+                <span>Google Sign-In</span>
+              </button>
+
+              {/* Interactive Full Screen Mode Toggle */}
+              <button
+                id="btn-toggle-fullscreen"
+                type="button"
+                onClick={toggleAppFullscreen}
+                className={`px-3 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer border ${
+                  isFullscreen
+                    ? "bg-purple-900/90 text-purple-200 border-purple-500 shadow-md"
+                    : "bg-stone-900/90 text-stone-400 hover:text-white border-stone-800 hover:border-purple-600/50"
+                }`}
+                title={isFullscreen ? "Exit Full Screen" : "Enter Interactive Full Screen"}
+              >
+                {isFullscreen ? (
+                  <>
+                    <Minimize2 size={14} className="text-purple-300" />
+                    <span className="hidden sm:inline">Exit Full Screen</span>
+                  </>
+                ) : (
+                  <>
+                    <Maximize2 size={14} className="text-purple-300" />
+                    <span className="hidden sm:inline">Full Screen</span>
+                  </>
+                )}
+              </button>
+
+              {/* 🔴 V DROPDOWN HIDE & DISPLAY BUTTON AT THE FAR RIGHT ENDING OF THE BANNER (MATCHING USER SCREENSHOT ARROW EXACTLY) */}
+              <button
+                id="btn-hide-nav-banner-v"
+                type="button"
+                onClick={() => setIsNavBannerHidden(true)}
+                className="px-3 py-2 bg-gradient-to-r from-red-900 via-rose-950 to-red-950 hover:from-red-800 hover:to-red-900 text-white rounded-lg text-xs font-black transition-all flex items-center gap-1.5 cursor-pointer border-2 border-red-500/80 shadow-2xl hover:scale-105 active:scale-95 shrink-0 ml-1 group"
+                title="Hide / Collapse Full Banner till full screen so it does not block the workspace at the back"
+              >
+                <ChevronUp size={16} className="text-amber-300 font-black group-hover:animate-bounce" />
+                <span className="text-amber-400 font-black text-sm leading-none">▼</span>
+                <span className="text-[11px] font-black uppercase tracking-wider text-red-100">V</span>
+              </button>
+
+            </div>
+          )}
+
+        </div>
+      </header>
+
+      {/* MAIN CONTENT AREA */}
+      <main className="max-w-7xl mx-auto px-4 py-6">
+        {/* Celestial Timeline Cinema Marquee */}
+        <CelestialTimelineCinema onSelectSection={(route) => {
+          if (route === '#sreymara_queen') setIsSreymaraAgentOpen(true);
+          else if (route === '#adsgram') setActiveMainTab('adsgram_ton');
+          else if (route === '#banking') setActiveMainTab('cross_border_payments');
+          else if (route === '#earnings') setActiveMainTab('cloudflare');
+          else if (route === '#telegram_auth') setActiveMainTab('telegram_auth');
+          else if (route === '#ton_yield') setActiveMainTab('ton_settlement');
+          else if (route === '#embedded_apps') {
+            window.dispatchEvent(new CustomEvent('open-embedded-apps'));
+            const el = document.getElementById('embedded_15_apps');
+            if (el) el.scrollIntoView({ behavior: 'smooth' });
+          }
+          if (typeof (window as any).triggerTripleEcosystemAdFlow === 'function') {
+            (window as any).triggerTripleEcosystemAdFlow("CINEMA_MODULE_CLICK");
+          }
+        }} />
+
+        {/* 15 EMBEDDED ORIGINAL APPS SUITE & IN-ECOSYSTEM BROWSER (CLEAN STARTUP WITH SHOW/HIDE) */}
+        <EmbeddedFifteenOriginalAppsSuite defaultOpen={false} />
+
+        {/* Geo-Targeting Matrix & 80/20 Social Monetization Suite */}
+        <GeoTargetingSocialMonetizationSuite
+          userEmail="kansasnelly@gmail.com"
+          onGoogleLoginRequest={() => setShowGoogleSignInModal(true)}
+        />
+
+        {/* REVEALED BACKGROUND VIEW WHEN USER CLICKS HIDE TAB */}
+        {isTabHidden && (
+          <div className="space-y-8 animate-fade-in">
+            {/* Ambient Background Notification Bar */}
+            <div className="bg-[#0e121d] p-4 rounded-2xl border border-emerald-500/50 shadow-2xl flex justify-between items-center flex-wrap gap-4">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-xl bg-emerald-950 border border-emerald-700 flex items-center justify-center text-emerald-400">
+                  <Eye size={18} />
+                </div>
+                <div>
+                  <h2 className="font-serif font-bold text-base text-emerald-300 flex items-center gap-2">
+                    Background Canvas & AlphaQubit Deep Layer Uncovered
+                  </h2>
+                  <p className="text-xs text-stone-300">
+                    The foreground interface is currently hidden. You can now view and interact with the underlying 3D Quantum Engine and architectural models unobstructed.
+                  </p>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setIsTabHidden(false)}
+                className="px-5 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-black rounded-xl shadow-lg border border-emerald-400/50 flex items-center gap-2 cursor-pointer transition-all transform hover:scale-105"
+              >
+                <Eye size={16} />
+                <span>RESTORE FOREGROUND INTERFACE</span>
+              </button>
+            </div>
+
+            {/* Full 3D Interactive Quantum Simulation Stage */}
+            <div className="relative w-full h-[480px] rounded-3xl border border-stone-800 overflow-hidden bg-radial from-[#131724] to-[#08090E] shadow-2xl flex items-center justify-center">
+              <HeroScene />
+              <div className="absolute top-4 left-4 z-10 bg-black/70 backdrop-blur-md px-3.5 py-1.5 rounded-xl border border-stone-700 text-[11px] text-stone-300 font-mono flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+                <span>Active 3D Quantum State • Recurrent Surface Code Decoding Grid</span>
+              </div>
+              <div className="absolute bottom-6 text-center z-10 max-w-xl px-4 bg-black/60 backdrop-blur-md py-3 rounded-2xl border border-stone-800">
+                <p className="text-xs text-stone-300 font-serif italic">
+                  "AlphaQubit leverages recurrent transformers to predict syndrome errors with super-classical fidelity."
+                </p>
+                <p className="text-[10px] text-nobel-gold font-mono mt-1">Nature (2024) Quantum AI Architecture</p>
+              </div>
+            </div>
+
+            {/* Quick Switch Cards while in Background View */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="p-5 bg-[#0D0F17] rounded-2xl border border-stone-800 space-y-3">
+                <div className="flex items-center gap-2 text-amber-400 font-bold text-sm">
+                  <ShoppingBag size={16} />
+                  <span>Shopify & Tidio Live Engine (Running in Background)</span>
+                </div>
+                <p className="text-xs text-stone-400">
+                  Revenue splits (80/20) and visitor sessions are streaming in real-time. Unhide the tab anytime to manage payouts and transactions.
+                </p>
+                <button
+                  onClick={() => {
+                    setActiveMainTab("revenue");
+                    setIsTabHidden(false);
+                  }}
+                  className="text-xs font-bold text-amber-400 hover:text-amber-300 flex items-center gap-1 cursor-pointer"
+                >
+                  Open Revenue Engine →
+                </button>
+              </div>
+
+              <div className="p-5 bg-[#0D0F17] rounded-2xl border border-stone-800 space-y-3">
+                <div className="flex items-center gap-2 text-purple-400 font-bold text-sm">
+                  <Mail size={16} />
+                  <span>Mail.com & Multi Sreymara AI (Ready)</span>
+                </div>
+                <p className="text-xs text-stone-400">
+                  Google Gemini 3.6 Flash conversational engine is synchronized. Your chat session is safely preserved.
+                </p>
+                <button
+                  onClick={() => {
+                    setActiveMainTab("mail_ai");
+                    setIsTabHidden(false);
+                  }}
+                  className="text-xs font-bold text-purple-400 hover:text-purple-300 flex items-center gap-1 cursor-pointer"
+                >
+                  Open Multi Sreymara AI →
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* VIEW: SREY WALLET STANDALONE TELEGRAM MINI APP (TMA) */}
+        {!isTabHidden && activeMainTab === "srey_wallet" && (
+          <div className="w-full flex justify-center animate-fade-in py-2">
+            <div className="w-full max-w-md bg-[#07090E] rounded-3xl border border-stone-800 shadow-[0_0_50px_rgba(0,0,0,0.8)] overflow-hidden">
+              <SreyWalletApp onClose={() => setActiveMainTab("google_gemini")} />
+            </div>
+          </div>
+        )}
+
+        {/* VIEW: GOOGLE GEMINI WORKSPACE & OFFICIAL GOOGLE ACCOUNTS SUITE */}
+        {!isTabHidden && activeMainTab === "google_gemini" && (
+          <div className="w-full animate-fade-in">
+            <GoogleGeminiEcosystemSuite />
+          </div>
+        )}
+
+        {/* VIEW: COMMUNITY ECOSYSTEM HUB & ZEALY/GALXE QUESTS */}
+        {!isTabHidden && activeMainTab === "community_hub" && (
+          <div className="w-full max-w-7xl mx-auto px-4 py-4 animate-fade-in space-y-6">
+            <CommunityEcosystemHub onNavigateToFranz={() => setActiveMainTab("franz_messenger")} />
+          </div>
+        )}
+
+        {/* VIEW: FRANZ MULTI-MESSENGER ELECTRON CORE WRAPPER & ISOLATED WEBVIEW ENGINE */}
+        {!isTabHidden && activeMainTab === "franz_messenger" && (
+          <div className="w-full h-[88vh] min-h-[660px] max-h-[920px] rounded-2xl overflow-hidden border border-stone-800 shadow-2xl animate-fade-in flex flex-col">
+            <FranzMultiMessengerWrapper onCloseToMain={() => setActiveMainTab("web_to_app")} />
+          </div>
+        )}
+
+        {/* VIEW: WEBSITE TO APP CONVERTER (com.webtoapp.converter from Google Play) */}
+        {!isTabHidden && activeMainTab === "web_to_app" && (
+          <div className="space-y-8 animate-fade-in flex flex-col items-center w-full max-w-7xl mx-auto">
+            <WebsiteToAppConverter onClose={() => setActiveMainTab("revenue")} />
+            <div className="w-full pt-4">
+              <CommunityEcosystemHub onNavigateToFranz={() => setActiveMainTab("franz_messenger")} />
+            </div>
+          </div>
+        )}
+
+        {/* VIEW: ADSGAM & TON REVENUE AGGREGATOR & PAYOUT DISTRIBUTION SUITE */}
+        {!isTabHidden && activeMainTab === "adsgram_ton" && (
+          <div className="space-y-6 animate-fade-in flex flex-col items-center">
+            <AdsGramTonPayoutSuite onClose={() => setActiveMainTab("web_to_app")} />
+          </div>
+        )}
+
+        {/* VIEW: TON HIGH-YIELD SETTLEMENT PIPELINE & EXPLORER SUITE */}
+        {!isTabHidden && activeMainTab === "ton_settlement" && (
+          <div className="space-y-6 animate-fade-in max-w-7xl mx-auto w-full">
+            <GeminiFundsSettlementSuite />
+            <TonSettlementEngineWidget />
+            <TonSettlementPipelineSuite />
+          </div>
+        )}
+
+        {/* VIEW 1: SHOPIFY + TIDIO + PHANTOM REVENUE ENGINE (Rendered when not hidden) */}
+        {!isTabHidden && activeMainTab === "revenue" && (
+          <div className="space-y-6 animate-fade-in">
+            <div className="bg-[#0C0E14] p-4 rounded-xl border border-stone-800 flex justify-between items-center flex-wrap gap-4">
+              <div>
+                <h2 className="font-serif font-bold text-lg text-amber-400 flex items-center gap-2">
+                  <Activity size={18} /> Live Interactive Revenue & Event Simulation Control
+                </h2>
+                <p className="text-xs text-stone-400">
+                  Track real-time visitor signals, active session durations, yield accruals, Phantom USDT withdrawals, and 80/20 cinema video shares.
+                </p>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setActiveMainTab("sco_monetization")}
+                  className="px-4 py-2 bg-amber-600 hover:bg-amber-500 text-stone-950 text-xs font-bold rounded-lg border border-amber-400 flex items-center gap-2 cursor-pointer transition-all shadow"
+                >
+                  <Coins size={14} /> SCO Worldwide Monetization & Blockchain
+                </button>
+                <button
+                  onClick={() => setActiveMainTab("mail_ai")}
+                  className="px-4 py-2 bg-purple-900/80 hover:bg-purple-800 text-purple-200 text-xs font-bold rounded-lg border border-purple-700 flex items-center gap-2 cursor-pointer"
+                >
+                  <Mail size={14} /> Open Mail.com & Multi Sreymara AI Engine
+                </button>
+              </div>
+            </div>
+
+            {/* Embedded Live Ecosystem Dashboard */}
+            <EcosystemDashboard />
+          </div>
+        )}
+
+        {/* VIEW: TELEGRAM @WALLET & TON JETTON SUITE */}
+        {!isTabHidden && activeMainTab === "ton_wallet" && (
+          <div className="space-y-6 animate-fade-in">
+            <EcosystemDashboard initialTab="ton_wallet" />
+          </div>
+        )}
+
+        {/* VIEW: YOUTUBE & CINEMA 4K AI VIDEO GENERATION SUITE */}
+        {!isTabHidden && activeMainTab === "cinema_video" && (
+          <div className="space-y-6 animate-fade-in">
+            <YouTubeCinemaVideoSuite />
+          </div>
+        )}
+
+        {/* VIEW: CLOUDFLARE CUSTOM DOMAIN INTEGRATION MANAGER */}
+        {!isTabHidden && activeMainTab === "cloudflare" && (
+          <div className="space-y-6 animate-fade-in">
+            <CloudflareDomainManager />
+          </div>
+        )}
+
+        {/* VIEW: ADMIN CONTROL PALACE REAL BACKEND DASHBOARD */}
+        {!isTabHidden && activeMainTab === "admin_palace" && (
+          <div className="space-y-6 animate-fade-in">
+            <AdminControlPalace onClose={() => setActiveMainTab("revenue")} />
+          </div>
+        )}
+
+        {/* VIEW: CROSS-BORDER PAYMENTS & BANKING ARCHITECTURE (PCI-DSS & ACH) */}
+        {!isTabHidden && activeMainTab === "cross_border_payments" && (
+          <div className="space-y-6 animate-fade-in">
+            <CrossBorderPaymentGatewaySuite onClose={() => setActiveMainTab("revenue")} />
+          </div>
+        )}
+
+        {/* VIEW: COINBASE MCP & AGENT ECOSYSTEM SUITE */}
+        {!isTabHidden && activeMainTab === "coinbase_mcp" && (
+          <div className="space-y-6 animate-fade-in">
+            <CoinbaseAgentMcpSuite onClose={() => setActiveMainTab("revenue")} />
+          </div>
+        )}
+
+        {/* VIEW: EXTERNAL SYSTEMS TRANSACTION INTEGRATION GATEWAY */}
+        {!isTabHidden && activeMainTab === "external_api" && (
+          <div className="space-y-6 animate-fade-in">
+            <ExternalTransactionIntegration />
+          </div>
+        )}
+
+        {/* VIEW: OFFICIAL TELEGRAM AUTH & CLIENT GATEWAY (OFFICIAL SPEC) */}
+        {!isTabHidden && activeMainTab === "telegram_auth" && (
+          <div className="space-y-6 animate-fade-in">
+            <OfficialTelegramSuite onClose={() => setActiveMainTab("ton_wallet")} />
+          </div>
+        )}
+
+        {/* VIEW: SOLSCAN.IO PRO EXPLORER & REAL-TIME TRANSACTION PUSHER */}
+        {!isTabHidden && activeMainTab === "solscan" && (
+          <div className="space-y-6 animate-fade-in">
+            <SolscanSuite />
+          </div>
+        )}
+
+        {/* VIEW: SCO MONETIZATION & REAL BLOCKCHAIN ENGINE */}
+        {!isTabHidden && activeMainTab === "sco_monetization" && (
+          <div className="space-y-6 animate-fade-in">
+            <ScoMonetizationSuite />
+          </div>
+        )}
+
+        {/* VIEW 2: MAIL.COM & MULTI SREYMARA AI STUDIO (Rendered when not hidden) */}
+        {!isTabHidden && activeMainTab === "mail_ai" && (
+          <div className="space-y-6 animate-fade-in">
+            <MailStudioSuite 
+              onClose={() => setActiveMainTab("revenue")} 
+              onHideTab={() => setIsTabHidden(true)}
+            />
+          </div>
+        )}
+
+        {/* VIEW: GOOGLE VISITOR SIGN-IN & ECOSYSTEM REGISTRY RECORDS */}
+        {!isTabHidden && activeMainTab === "visitor_records" && (
+          <div className="space-y-6 animate-fade-in">
+            <EcosystemVisitorRecordsSuite />
+          </div>
+        )}
+
+        {/* VIEW: DATINGARTS LUXURY MATCHMAKING & 100% HUMAN CHAT SUITE */}
+        {!isTabHidden && activeMainTab === "datingarts" && (
+          <div className="space-y-6 animate-fade-in">
+            <DatingArtsMatchmakingSuite 
+              onSwitchToEcosystem={() => setActiveMainTab("revenue")}
+              onSwitchToAdmin={() => setActiveMainTab("admin_palace")}
+            />
+          </div>
+        )}
+
+        {/* VIEW: LITMATCH OFFICIAL CLONED LANDING PAGE REBUILD */}
+        {!isTabHidden && activeMainTab === "litmatch" && (
+          <div className="space-y-6 animate-fade-in -mx-4 -my-6">
+            <LitmatchLandingPage
+              onClose={() => setActiveMainTab("revenue")}
+              onOpenApp={() => setActiveMainTab("community_hub")}
+            />
+          </div>
+        )}
+
+        {/* VIEW: SREYMARA APPZ ECOSYSTEM INSTALLER & EMBEDDED WORKSPACE */}
+        {!isTabHidden && activeMainTab === "sreymara_appz" && (
+          <div className="space-y-6 animate-fade-in">
+            <SreymaraAppzInstaller
+              onLaunchApp={(app) => {
+                if (app.type === "internal_suite" && app.internalTabKey) {
+                  setActiveMainTab(app.internalTabKey as any);
+                }
+              }}
+              onClose={() => setActiveMainTab("revenue")}
+            />
+          </div>
+        )}
+
+        {/* VIEW 3: ALPHAQUBIT QUANTUM RESEARCH PAPER (Rendered when not hidden) */}
+        {!isTabHidden && activeMainTab === "quantum" && (
+          <div className="space-y-16 animate-fade-in pt-4">
+            
+            {/* Paper Navigation Links & Close Button (Screenshot 6 Fix) */}
+            <div className="flex justify-between items-center bg-[#0D0F17] p-3 rounded-2xl border border-stone-800 flex-wrap gap-4 shadow-xl">
+              <div className="flex items-center gap-3 flex-wrap text-xs font-bold uppercase tracking-wider">
+                <a href="#introduction" onClick={scrollToSection('introduction')} className="px-4 py-2 bg-stone-900 border border-stone-800 hover:border-nobel-gold rounded-lg text-stone-300">
+                  Introduction
+                </a>
+                <a href="#science" onClick={scrollToSection('science')} className="px-4 py-2 bg-stone-900 border border-stone-800 hover:border-nobel-gold rounded-lg text-stone-300">
+                  The Surface Code
+                </a>
+                <a href="#impact" onClick={scrollToSection('impact')} className="px-4 py-2 bg-stone-900 border border-stone-800 hover:border-nobel-gold rounded-lg text-stone-300">
+                  Impact
+                </a>
+                <a href="#authors" onClick={scrollToSection('authors')} className="px-4 py-2 bg-stone-900 border border-stone-800 hover:border-nobel-gold rounded-lg text-stone-300">
+                  Authors
+                </a>
+              </div>
+
+              <button
+                onClick={() => setActiveMainTab("revenue")}
+                className="px-4 py-2 bg-red-950/80 hover:bg-red-800 text-red-200 hover:text-white rounded-xl text-xs font-bold border border-red-700/60 shadow-lg transition-all flex items-center gap-1.5 cursor-pointer"
+                title="Close AlphaQubit Research Paper"
+              >
+                <X size={15} className="text-red-400" />
+                <span>CLOSE PAPER</span>
+              </button>
+            </div>
+
+            {/* Hero Section */}
+            <section className="relative pt-8 pb-16 min-h-[60vh] flex items-center justify-center">
+              <div className="absolute inset-0 z-0 opacity-40">
+                <HeroScene />
+              </div>
+
+              <div className="container mx-auto px-6 z-10 text-center relative max-w-4xl">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-nobel-gold/40 bg-nobel-gold/10 text-nobel-gold text-xs font-semibold uppercase tracking-widest mb-6 backdrop-blur-md">
+                  <span>Nature</span>
+                  <span>•</span>
+                  <span>Nov 2024</span>
+                  <span>•</span>
+                  <span>Luxury Quantum Edition</span>
+                </div>
+
+                <h1 className="font-serif text-4xl md:text-6xl text-stone-100 font-bold mb-6 leading-tight tracking-tight">
+                  AlphaQubit: AI for Quantum Error Correction
+                </h1>
+
+                <p className="text-lg md:text-xl text-stone-300 font-light mb-8 max-w-2xl mx-auto leading-relaxed">
+                  A recurrent, transformer-based neural network that learns to decode the surface code with unprecedented accuracy.
+                </p>
+
+                <div className="flex justify-center gap-4">
+                  <a href="#science" onClick={scrollToSection('science')} className="px-6 py-3 bg-nobel-gold hover:bg-amber-500 text-stone-950 font-bold rounded-lg text-sm transition-all shadow-lg">
+                    Discover AlphaQubit
+                  </a>
+                </div>
+              </div>
+            </section>
+
+            {/* Section 1: Introduction */}
+            <section id="introduction" className="py-12 border-t border-stone-800">
+              <div className="container mx-auto max-w-4xl">
+                <h2 className="font-serif text-3xl font-bold text-amber-400 mb-6 text-center">Learning High-Accuracy Error Decoding</h2>
+                <p className="text-stone-300 leading-relaxed text-base mb-6">
+                  Quantum computers hold immense promise for solving complex problems, but quantum bits (qubits) are inherently fragile and prone to environmental noise. Quantum error correction (QEC) protects quantum information by entangling multiple physical qubits into a single logical qubit using surface codes.
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 my-8">
+                  <div className="p-6 bg-stone-900/80 rounded-xl border border-stone-800">
+                    <h3 className="font-serif text-lg font-bold text-stone-100 mb-2">Syndrome Decoding Challenge</h3>
+                    <p className="text-xs text-stone-400 leading-relaxed">
+                      Measuring stabilizer operators yields syndrome data. Translating complex syndrome patterns into precise physical error locations in real-time requires powerful AI architectures.
+                    </p>
+                  </div>
+                  <div className="p-6 bg-stone-900/80 rounded-xl border border-stone-800">
+                    <h3 className="font-serif text-lg font-bold text-stone-100 mb-2">AlphaQubit Breakthrough</h3>
+                    <p className="text-xs text-stone-400 leading-relaxed">
+                      Trained on quantum processor simulations and experimental Sycamore data, AlphaQubit outperforms standard minimum-weight perfect matching (MWPM) algorithms across all noise regimes.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {/* Section 2: Science */}
+            <section id="science" className="py-12 border-t border-stone-800">
+              <div className="container mx-auto max-w-5xl space-y-12">
+                <div className="text-center">
+                  <h2 className="font-serif text-3xl font-bold text-stone-100 mb-3">The Science Behind AlphaQubit</h2>
+                  <p className="text-stone-400 text-sm">Visualizing surface code grid layout and syndrome detection pipeline.</p>
+                </div>
+
+                <SurfaceCodeDiagram />
+                <TransformerDecoderDiagram />
+              </div>
+            </section>
+
+            {/* Section 3: Impact */}
+            <section id="impact" className="py-12 border-t border-stone-800">
+              <div className="container mx-auto max-w-5xl space-y-8">
+                <div className="text-center">
+                  <h2 className="font-serif text-3xl font-bold text-stone-100 mb-3">Performance & Benchmark Impact</h2>
+                  <p className="text-stone-400 text-sm">Comparing AlphaQubit against classical decoders on Google Sycamore processor chips.</p>
+                </div>
+                <PerformanceMetricDiagram />
+              </div>
+            </section>
+
+            {/* Section 4: Authors */}
+            <section id="authors" className="py-12 border-t border-stone-800">
+              <div className="container mx-auto max-w-5xl">
+                <h2 className="font-serif text-3xl font-bold text-amber-400 mb-8 text-center">Research Contributors</h2>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 justify-items-center">
+                  <AuthorCard name="Julian Bausch" role="Google DeepMind" delay="0.1s" />
+                  <AuthorCard name="Michael Newman" role="Google Quantum AI" delay="0.3s" />
+                  <AuthorCard name="Multi Sreymara AI" role="Executive AI Synthesis Engine" delay="0.5s" />
+                </div>
+              </div>
+            </section>
+
+          </div>
+        )}
+
+      </main>
+
+      {/* FOOTER */}
+      <footer className="bg-stone-950 text-stone-400 py-10 border-t border-stone-800 mt-20">
+        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4 text-xs">
+          <div>
+            <div className="text-white font-serif font-bold text-lg">AlphaQubit Quantum Ecosystem</div>
+            <p className="text-stone-500">Live Shopify, Tidio, Phantom Web3, Mail.com & Multi Sreymara AI Integration.</p>
+          </div>
+          <div className="text-stone-600 font-mono text-[11px]">
+            Based on research published in Nature (2024). All server endpoints operational.
+          </div>
+        </div>
+      </footer>
+
+      {/* VIRAL GUEST REGISTER MODAL OVERLAY */}
+      {showRegisterModal && (
+        <ViralGuestRegisterModal
+          onClose={() => setShowRegisterModal(false)}
+          onRegistered={() => {
+            setShowRegisterModal(false);
+            setActiveMainTab("telegram_auth");
+          }}
+        />
+      )}
+
+      {/* GLOBAL GOOGLE VISITOR SIGN-IN MODAL OVERLAY */}
+      <GoogleVisitorSignInModal
+        isOpen={showGoogleSignInModal}
+        onClose={() => setShowGoogleSignInModal(false)}
+        onSuccess={(rec) => {
+          setShowGoogleSignInModal(false);
+          setActiveMainTab("visitor_records");
+        }}
+      />
+
+      {/* GLOBAL ANDROID APP INSTALLER MODAL (EMBEDDED IN-ECOSYSTEM APPS) */}
+      <AndroidAppInstallerModal
+        isOpen={showAndroidInstallerModal}
+        onClose={() => setShowAndroidInstallerModal(false)}
+      />
+
+      {/* EXTERNAL PORTABLE MINI CINEMA & NOTIFICATION BOARD DOCK (BOTTOM-RIGHT EDGE) */}
+      <PortableMiniCinemaEcosystem
+        isSreymaraCollapsed={!isSreymaraAgentOpen}
+        onOpenInstaller={() => setShowAndroidInstallerModal(true)}
+        onNavigateToTab={(tab) => {
+          setActiveMainTab(tab as any);
+          setIsTabHidden(false);
+        }}
+        onOpenTelegram={() => {
+          setActiveMainTab("telegram_auth");
+          setIsTabHidden(false);
+        }}
+        onOpenWhatsapp={() => {
+          setActiveMainTab("datingarts");
+          setIsTabHidden(false);
+        }}
+      />
+
+      {/* CELESTIAL 7-COLOR STAR INSPECTOR MODAL */}
+      {selectedStar && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 animate-fade-in">
+          <div className="bg-[#0D081E] border-2 border-amber-500/80 rounded-3xl p-6 max-w-md w-full shadow-2xl text-center space-y-4">
+            <div className="flex justify-between items-center border-b border-stone-800 pb-3">
+              <span className="text-xs font-mono text-stone-400">LUXURIOUS CELESTIAL STAR</span>
+              <button
+                onClick={() => setSelectedStar(null)}
+                className="text-stone-400 hover:text-white p-1 cursor-pointer"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <div className="py-3 flex flex-col items-center">
+              <div
+                className="w-16 h-16 rounded-full flex items-center justify-center mb-3 shadow-xl animate-pulse"
+                style={{ backgroundColor: `${selectedStar.color}20`, border: `2px solid ${selectedStar.color}` }}
+              >
+                <Star size={32} style={{ color: selectedStar.color, fill: selectedStar.color }} />
+              </div>
+              <h3 className="text-xl font-serif font-black" style={{ color: selectedStar.color }}>
+                {selectedStar.name}
+              </h3>
+              <p className="text-xs text-stone-300 font-mono mt-1 font-bold">
+                {selectedStar.meaning}
+              </p>
+            </div>
+
+            <p className="text-xs text-stone-400 leading-relaxed bg-black/50 p-3 rounded-2xl border border-stone-800 text-left font-mono">
+              The 7 hidden stars seal the Sreymara build frame with quantum integrity. Every user action, ad impression, 80/20 payout share, and transaction executes bulletproof inside this embedded ecosystem.
+            </p>
+
+            <button
+              onClick={() => setSelectedStar(null)}
+              className="w-full py-2.5 bg-gradient-to-r from-amber-600 to-amber-700 text-stone-950 font-black text-xs rounded-xl shadow-lg cursor-pointer hover:from-amber-500 hover:to-amber-600 transition-all"
+            >
+              Close Star Inspector
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* DISTINCT BROWSER URLS NAVIGATOR & COPIER MODAL */}
+      {showUrlNavigatorModal && (
+        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 animate-fade-in select-none">
+          <div className="w-full max-w-lg bg-[#11141c] border-2 border-amber-500/50 rounded-2xl shadow-2xl p-6 text-stone-100 flex flex-col space-y-4">
+            <div className="flex items-center justify-between border-b border-stone-800 pb-3">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 font-bold text-base">
+                  🔗
+                </div>
+                <div>
+                  <h3 className="font-serif font-bold text-base text-white">Browser URLs & Direct Links</h3>
+                  <p className="text-[11px] text-stone-400">Separate distinct endpoints for any web browser</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setShowUrlNavigatorModal(false)}
+                className="w-7 h-7 rounded-lg hover:bg-stone-800 flex items-center justify-center text-stone-400 hover:text-white cursor-pointer"
+              >
+                <X size={16} />
+              </button>
+            </div>
+
+            {/* URL 1: Public Standalone URL (Opens On Its Own) */}
+            <div className="p-3.5 rounded-xl bg-gradient-to-r from-emerald-950/60 to-[#161a24] border-2 border-emerald-500/70 space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-emerald-300 flex items-center gap-1.5 font-mono">
+                  <span>🌐</span>
+                  <span>STANDALONE PUBLIC URL (OPENS ON ITS OWN)</span>
+                </span>
+                <span className="px-2 py-0.5 rounded bg-emerald-500 text-stone-950 text-[10px] font-mono font-black">
+                  STANDALONE
+                </span>
+              </div>
+              <p className="text-[11px] text-stone-300 leading-relaxed">
+                Opens directly in any browser tab, phone, or computer on its own without Google AI Studio login or 404 errors!
+              </p>
+              <div className="flex items-center gap-2">
+                <input
+                  type="text"
+                  readOnly
+                  value="https://ais-pre-yri2x2xif26llxnhpuguzk-152195627325.asia-east1.run.app/"
+                  className="flex-1 bg-black/80 border border-emerald-500/60 rounded-lg px-2.5 py-1.5 text-xs font-mono text-emerald-300 select-all"
+                />
+                <button
+                  onClick={() => {
+                    const u = "https://ais-pre-yri2x2xif26llxnhpuguzk-152195627325.asia-east1.run.app/";
+                    navigator.clipboard.writeText(u);
+                    alert(`Public Standalone URL copied:\n${u}\n\nPaste this in any new browser tab to open on its own!`);
+                  }}
+                  className="px-3 py-1.5 bg-emerald-500 hover:bg-emerald-400 text-stone-950 font-black text-xs rounded-lg cursor-pointer shadow"
+                >
+                  Copy
+                </button>
+                <button
+                  onClick={() => {
+                    window.open("https://ais-pre-yri2x2xif26llxnhpuguzk-152195627325.asia-east1.run.app/", "_blank", "noopener,noreferrer");
+                    setShowUrlNavigatorModal(false);
+                  }}
+                  className="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-lg cursor-pointer shadow"
+                >
+                  Open ↗
+                </button>
+              </div>
+            </div>
+
+            {/* URL 2: AlphaQubit Quantum Ecosystem Route */}
+            <div className="p-3.5 rounded-xl bg-[#161a24] border border-amber-500/40 space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-amber-400 flex items-center gap-1.5">
+                  <span>⚛</span>
+                  <span>AlphaQubit Ecosystem Mainnet Route</span>
+                </span>
+                <span className="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 text-[10px] font-mono font-bold">
+                  ROUTE: /
+                </span>
+              </div>
+              <p className="text-[11px] text-stone-300">
+                Primary hub: 15 Embedded Original Apps, 3D Quantum Engine, TON Ad Revenue, Sreymara Queen AI, and Cinema 24/7.
+              </p>
+              <div className="flex items-center gap-2">
+                <input
+                  type="text"
+                  readOnly
+                  value="https://ais-pre-yri2x2xif26llxnhpuguzk-152195627325.asia-east1.run.app/"
+                  className="flex-1 bg-black/60 border border-stone-700 rounded-lg px-2.5 py-1.5 text-xs font-mono text-amber-300 select-all"
+                />
+                <button
+                  onClick={() => {
+                    const u = "https://ais-pre-yri2x2xif26llxnhpuguzk-152195627325.asia-east1.run.app/";
+                    navigator.clipboard.writeText(u);
+                    alert(`URL copied:\n${u}`);
+                  }}
+                  className="px-3 py-1.5 bg-amber-600 hover:bg-amber-500 text-stone-950 font-bold text-xs rounded-lg cursor-pointer"
+                >
+                  Copy
+                </button>
+                <button
+                  onClick={() => {
+                    setActiveMainTab("web_to_app");
+                    setShowUrlNavigatorModal(false);
+                  }}
+                  className="px-3 py-1.5 bg-stone-800 hover:bg-stone-700 text-white font-bold text-xs rounded-lg cursor-pointer"
+                >
+                  Go
+                </button>
+              </div>
+            </div>
+
+            {/* URL 2: Franz Multi-Messenger OS */}
+            <div className="p-3.5 rounded-xl bg-[#131b2b] border border-sky-500/40 space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-sky-400 flex items-center gap-1.5">
+                  <MessageSquare size={13} />
+                  <span>Franz Multi-Messenger System (Separate Dedicated URL)</span>
+                </span>
+                <span className="px-2 py-0.5 rounded bg-sky-500/20 text-sky-300 text-[10px] font-mono font-bold">
+                  ROUTE: /franz
+                </span>
+              </div>
+              <p className="text-[11px] text-stone-300">
+                Direct isolated messaging desktop wrapper: 80+ messaging services, multi-account WhatsApp/Telegram/Instagram, DevTools, and Kansas Nelly VIP Lifetime bypass.
+              </p>
+              <div className="flex items-center gap-2">
+                <input
+                  type="text"
+                  readOnly
+                  value={typeof window !== "undefined" ? `${window.location.origin}/franz` : "https://ais-dev-yri2x2xif26llxnhpuguzk-152195627325.asia-east1.run.app/franz"}
+                  className="flex-1 bg-black/60 border border-stone-700 rounded-lg px-2.5 py-1.5 text-xs font-mono text-sky-300 select-all"
+                />
+                <button
+                  onClick={() => {
+                    const u = `${window.location.origin}/franz`;
+                    navigator.clipboard.writeText(u);
+                    alert(`Franz Multi-Messenger URL copied:\n${u}`);
+                  }}
+                  className="px-3 py-1.5 bg-sky-600 hover:bg-sky-500 text-white font-bold text-xs rounded-lg cursor-pointer"
+                >
+                  Copy
+                </button>
+                <button
+                  onClick={() => {
+                    setActiveMainTab("franz_messenger");
+                    setShowUrlNavigatorModal(false);
+                  }}
+                  className="px-3 py-1.5 bg-sky-700 hover:bg-sky-600 text-white font-bold text-xs rounded-lg cursor-pointer"
+                >
+                  Open
+                </button>
+              </div>
+            </div>
+
+            <div className="pt-2 flex justify-end">
+              <button
+                onClick={() => setShowUrlNavigatorModal(false)}
+                className="px-4 py-2 bg-stone-800 hover:bg-stone-700 text-stone-200 text-xs font-bold rounded-lg cursor-pointer"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* SREYMARA QUEEN CONVERSATIONAL AI FLOATING WIDGET */}
+      <SreymaraQueenConversationalAI
+        isOpen={isSreymaraAgentOpen}
+        onClose={() => {
+          setIsSreymaraAgentOpen(false);
+          try {
+            localStorage.setItem("alphaqubit_sreymara_agent_open", "false");
+          } catch {}
+        }}
+        isFloating={true}
+      />
+
+      {/* DOCKED EXPAND TAB WHEN COLLAPSED: Sits seamlessly on bottom bar, exactly like Mini Cinema */}
+      {!isSreymaraAgentOpen && (
+        <div className="fixed bottom-3 right-3 z-50 flex items-center gap-2 animate-fade-in select-none">
+          <button
+            id="btn-floating-sreymara-agent"
+            type="button"
+            onClick={() => {
+              setIsSreymaraAgentOpen(true);
+              try {
+                localStorage.setItem("alphaqubit_sreymara_agent_open", "true");
+              } catch {}
+            }}
+            className="group px-3.5 py-2.5 bg-gradient-to-r from-blue-700 via-sky-600 to-indigo-700 hover:from-blue-600 hover:to-sky-500 text-white font-mono font-black text-xs rounded-xl shadow-2xl border-2 border-sky-400 flex items-center gap-2 cursor-pointer transition-all transform hover:scale-105 active:scale-95"
+            title="Click to show Sreymara Queen Conversational AI"
+          >
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+            <Crown size={15} className="text-amber-300" />
+            <span className="tracking-tight uppercase">SHOW AND HIDE TAB</span>
+            <span className="text-[10px] bg-blue-950/90 text-sky-200 px-1.5 py-0.5 rounded border border-sky-400/60 font-mono">
+              SREYMARA QUEEN
+            </span>
+            <ChevronUp size={14} className="text-white group-hover:-translate-y-0.5 transition-transform" />
+          </button>
+        </div>
+      )}
+
+      {/* TELEGRAM MINI ECOSYSTEM & MATCHMAKING FLOATING COLLAPSIBLE WIDGET */}
+      <TelegramMiniEcosystemWidget />
+
+      </div> {/* CLOSE LUXURIOUS BOLD BUILD FRAME */}
+    </div>
+  );
+};
+
+export default App;
