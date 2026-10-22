@@ -47,6 +47,7 @@ import { SreymaraBrowserWorkspaceSuite } from './components/SreymaraBrowserWorks
 import { ExecutiveSubSreymaraSuiteToast } from './components/ExecutiveSubSreymaraSuiteToast';
 import { LinkActivationOverlay } from './components/LinkActivationOverlay';
 import { EcosystemSearchHome } from './components/EcosystemSearchHome';
+import { FlyingAirdropBird } from './components/FlyingAirdropBird';
 import { googleSignIn, getActiveGoogleSession } from './src/lib/firebaseAuth';
 import { ShoppingBag, Mail, Sparkles, BookOpen, Layers, Globe, ShieldCheck, Activity, X, Eye, EyeOff, Maximize2, Minimize2, Coins, GitBranch, Wallet, Zap, Send, ExternalLink, Download, Share2, ChevronDown, ChevronUp, Grid, Smartphone, Crown, Lock, Video, Film, Users, UserCheck, Heart, Usb, Star, Mic, Bot, Building2, CreditCard, TrendingUp, MessageSquare, Radio, Cpu, Search } from 'lucide-react';
 
@@ -732,6 +733,16 @@ const App: React.FC = () => {
                 >
                   <Share2 size={10} />
                   <span>Dual URLs</span>
+                </button>
+                <button
+                  id="btn-open-search-home"
+                  onClick={() => setShowSearchHome(true)}
+                  className="px-2.5 py-0.5 rounded bg-gradient-to-r from-amber-500 via-emerald-500 to-teal-400 hover:brightness-110 text-stone-950 font-black text-[10px] flex items-center gap-1 cursor-pointer transition shadow-lg ring-1 ring-amber-300"
+                  title="Open Universal Ecosystem Search Home (Triple-Engine A-Z Index & Finder)"
+                >
+                  <Search size={10} className="text-stone-950 font-black" />
+                  <span>Search Ecosystem Home</span>
+                  <span className="px-1 py-0.2 bg-black/20 rounded text-[9px] font-mono">A-Z</span>
                 </button>
               </div>
             </div>
@@ -2294,6 +2305,16 @@ const App: React.FC = () => {
 
       {/* AUTOMATED LINK ACTIVATION OVERLAY (ADMIN TELEGRAM NOTIFICATION + SHORT VIDEO / HILLTOPADS AD) */}
       <LinkActivationOverlay />
+
+      {/* CELESTIAL FLYING AIRDROP BIRD & 10-PAYMENT EXECUTIVE SECTION */}
+      <FlyingAirdropBird
+        onOpenSearchHome={() => setShowSearchHome(true)}
+        onNavigateTab={(tab) => {
+          setActiveMainTab(tab as any);
+          setIsTabHidden(false);
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }}
+      />
 
       {/* UNIVERSAL ECOSYSTEM SEARCH HOME (A-Z INDEX & ORIGIN JUMP) */}
       {showSearchHome && (

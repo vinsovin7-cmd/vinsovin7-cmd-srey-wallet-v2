@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Sreymara Cinema & VIP Airdrop Mini App</title>
+  
+  <!-- Telegram WebApp SDK -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+  <!-- Official PayPal JS SDK (Sandbox Client with Fallback) -->
+  <script src="https://www.paypal.com/sdk/js?client-id=sb&currency=USD"></script>
+
+  <!-- Google Fonts & Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;900&family=Inter:wght@400;600;700;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-[#080A0F] text-stone-100 min-h-screen overflow-x-hidden font-sans selection:bg-amber-500 selection:text-black">
+
+  <!-- TOP HEADER -->
+  <header class="sticky top-0 z-40 bg-[#0B0E17]/95 backdrop-blur-md border-b border-stone-800/80 px-4 py-3 flex items-center justify-between shadow-xl">
+    <div class="flex items-center gap-2.5">
+      <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-500 to-yellow-300 text-stone-950 font-black text-lg flex items-center justify-center shadow-lg">
+        α
+      </div>
+      <div>
+        <h1 class="text-sm font-bold text-white tracking-wide flex items-center gap-1.5">
+          Sreymara Cinema <span class="text-[9px] px-1.5 py-0.2 bg-amber-500/20 text-amber-300 rounded border border-amber-500/30 font-mono">TMA v2</span>
+        </h1>
+        <p class="text-[10px] text-stone-400 font-mono flex items-center gap-1">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+          Master: UQBL...bnBJ
+        </p>
+      </div>
+    </div>
+
+    <!-- Solar Battery 14-Color Live Indicator & Quick Actions -->
+    <div class="flex items-center gap-2">
+      <button id="btn-trigger-bird-now" class="px-2.5 py-1 bg-gradient-to-r from-amber-500 to-teal-500 hover:from-amber-400 hover:to-teal-400 text-stone-950 text-[11px] font-black rounded-lg shadow-md cursor-pointer transition active:scale-95 flex items-center gap-1">
+        <span>🕊️</span>
+        <span class="hidden sm:inline">Launch Airdrop Bird</span>
+      </button>
+
+      <button id="btn-open-search-modal" class="px-2.5 py-1 bg-[#131722] hover:bg-[#1a2030] text-amber-300 border border-stone-700/80 text-[11px] font-bold rounded-lg cursor-pointer transition flex items-center gap-1">
+        <span>🔍</span>
+        <span>Search</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- 14-COLOR SOLAR BATTERY POWER BAR -->
+  <div class="w-full bg-[#0E121E] px-4 py-2 border-b border-stone-800/60 flex items-center justify-between gap-2 overflow-x-auto text-[10px] font-mono">
+    <span class="text-stone-400 shrink-0">14-Solar Yield:</span>
+    <div id="solar-battery-bar" class="flex items-center gap-1 shrink-0">
+      <span class="w-2.5 h-3.5 rounded-sm bg-red-500"></span>
+      <span class="w-2.5 h-3.5 rounded-sm bg-orange-500"></span>
+      <span class="w-2.5 h-3.5 rounded-sm bg-amber-500"></span>
+      <span class="w-2.5 h-3.5 rounded-sm bg-yellow-400"></span>
+      <span class="w-2.5 h-3.5 rounded-sm bg-lime-400"></span>
+      <span class="w-2.5 h-3.5 rounded-sm bg-green-500"></span>
+      <span class="w-2.5 h-3.5 rounded-sm bg-emerald-400"></span>
+      <span class="w-2.5 h-3.5 rounded-sm bg-teal-400"></span>
+      <span class="w-2.5 h-3.5 rounded-sm bg-cyan-400"></span>
+      <span class="w-2.5 h-3.5 rounded-sm bg-sky-400"></span>
+      <span class="w-2.5 h-3.5 rounded-sm bg-blue-500"></span>
+      <span class="w-2.5 h-3.5 rounded-sm bg-indigo-400"></span>
+      <span class="w-2.5 h-3.5 rounded-sm bg-violet-400"></span>
+      <span class="w-2.5 h-3.5 rounded-sm bg-purple-500"></span>
+    </div>
+    <span class="text-emerald-400 font-bold shrink-0">+18.5% APR</span>
+  </div>
+
+  <!-- MAIN CINEMA VIEWPORT & CONTENT -->
+  <main class="max-w-4xl mx-auto p-4 space-y-6">
+
+    <!-- 24/7 Celestial Cinema Player Container -->
+    <div class="relative w-full aspect-video bg-black rounded-2xl border border-stone-800 shadow-2xl overflow-hidden flex flex-col justify-between">
+      <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/40 pointer-events-none z-10"></div>
+      
+      <!-- Video Element -->
+      <div id="cinema-stream-container" class="w-full h-full flex items-center justify-center bg-radial from-[#151b2b] to-[#08090E]">
+        <div class="text-center space-y-2 p-6 z-20">
+          <div class="text-3xl animate-bounce">🎬</div>
+          <h2 id="active-stream-title" class="text-base font-bold text-white">Merlin — Camelot Chronicles (HD Live Broadcast)</h2>
+          <p class="text-xs text-stone-400">Watch & Earn • 80% Community Yield • 0.0s Live Edge</p>
+          <div class="flex items-center justify-center gap-2 pt-2">
+            <span class="px-2 py-0.5 rounded-full bg-red-600/80 text-white text-[10px] font-bold animate-pulse">● LIVE</span>
+            <span class="px-2 py-0.5 rounded-full bg-emerald-950 text-emerald-300 text-[10px] font-mono border border-emerald-800">Yield: $42.50 USDT</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cinema Controls -->
+      <div class="relative z-20 p-3 flex items-center justify-between bg-black/60 backdrop-blur-md border-t border-stone-800 text-xs">
+        <div class="flex items-center gap-2">
+          <button id="btn-toggle-stream" class="px-3 py-1 bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold rounded-lg cursor-pointer">
+            ▶ Play Stream
+          </button>
+          <span id="stream-status-badge" class="text-stone-300 text-[11px]">Buffer Purged • 100% Synced</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="btn-next-channel" class="px-2.5 py-1 bg-stone-800 hover:bg-stone-700 text-stone-200 rounded-lg cursor-pointer">
+            Next Channel ⏭
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Active Channel Selector Bar -->
+    <div class="space-y-2">
+      <div class="text-xs font-bold text-stone-400 uppercase tracking-wider flex items-center justify-between">
+        <span>Curated Channels & Seasons</span>
+        <span class="text-emerald-400 font-mono text-[10px]">Filter with Search (🔍)</span>
+      </div>
+      <div id="channel-tabs-container" class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+        <button class="channel-card p-3 rounded-xl bg-[#111624] border border-amber-500/50 text-left cursor-pointer hover:bg-[#182033] transition" data-channel="merlin_s1">
+          <div class="text-xs font-bold text-amber-300">Merlin Season 1</div>
+          <div class="text-[10px] text-stone-400">The Dragon's Call</div>
+        </button>
+        <button class="channel-card p-3 rounded-xl bg-[#111624] border border-stone-800 text-left cursor-pointer hover:bg-[#182033] transition" data-channel="merlin_s2">
+          <div class="text-xs font-bold text-white">Merlin Season 2</div>
+          <div class="text-[10px] text-stone-400">The Curse of Cornelius</div>
+        </button>
+        <button class="channel-card p-3 rounded-xl bg-[#111624] border border-stone-800 text-left cursor-pointer hover:bg-[#182033] transition" data-channel="seeker">
+          <div class="text-xs font-bold text-white">Legend of Seeker</div>
+          <div class="text-[10px] text-stone-400">Prophecy of Kahlan</div>
+        </button>
+        <button class="channel-card p-3 rounded-xl bg-[#111624] border border-stone-800 text-left cursor-pointer hover:bg-[#182033] transition" data-channel="aljazeera">
+          <div class="text-xs font-bold text-white">Al Jazeera English</div>
+          <div class="text-[10px] text-stone-400">24/7 Global News</div>
+        </button>
+      </div>
+    </div>
+
+    <!-- VIP Executive Perks & Live Yield Showcase -->
+    <div class="p-4 rounded-2xl bg-gradient-to-br from-[#121624] to-[#0A0D15] border border-stone-800 flex items-center justify-between flex-wrap gap-4">
+      <div>
+        <h3 class="text-sm font-bold text-amber-300 flex items-center gap-1.5">
+          <span>👑</span> Executive VIP Upgrade • $2.00 Instant Test
+        </h3>
+        <p class="text-xs text-stone-400 mt-0.5">
+          Unlock 3X Multiplier on all video views, automatic on-chain USDT streaming to Master Wallet, and master node voting rights.
+        </p>
+      </div>
+      <button id="btn-open-vip-modal" class="px-4 py-2 bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-stone-950 font-black text-xs rounded-xl shadow-lg cursor-pointer transition active:scale-95">
+        Upgrade Now ($2) →
+      </button>
+    </div>
+
+  </main>
+
+  <!-- ======================================================== -->
+  <!-- 🕊️ 10-MINUTE FLYING AIRDROP BIRD (AND TEST CONTROLLER) -->
+  <!-- ======================================================== -->
+  <div id="airdrop-bird-container" class="airdrop-bird-wrapper hidden">
+    <!-- Perch branch visible when bird settles -->
+    <div id="bird-perch" class="bird-perch-element hidden"></div>
+
+    <!-- Animated Flying Bird -->
+    <div id="airdrop-bird" class="airdrop-bird-body cursor-pointer" title="Click to claim Airdrop & Open Executive Payment Portal">
+      <div class="bird-wings"></div>
+      <div class="bird-core">
+        <span class="bird-emoji">🕊️</span>
+        <span class="bird-gift-pouch animate-bounce">$</span>
+      </div>
+      <!-- Dropped Crate (Appears on click or after landing) -->
+      <div id="airdrop-crate" class="airdrop-crate hidden">
+        <div class="crate-glow">📦</div>
+        <span class="crate-label">USDT AIRDROP</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- 🏛️ EXECUTIVE AIRDROP PORTAL & PAYMENT MODAL -->
+  <!-- ======================================================== -->
+  <div id="executive-payment-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 hidden animate-fadeIn">
+    <div class="w-full max-w-xl bg-[#0D111A] border border-amber-500/50 rounded-3xl p-6 shadow-2xl space-y-5 max-h-[90vh] overflow-y-auto">
+      
+      <!-- Modal Header with Close Button -->
+      <div class="flex items-center justify-between border-b border-stone-800 pb-3">
+        <div class="flex items-center gap-2">
+          <div class="w-9 h-9 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center text-lg font-black">
+            🕊️
+          </div>
+          <div>
+            <h2 class="text-base font-black text-white">Executive Airdrop Portal & VIP Gateway</h2>
+            <p class="text-xs text-stone-400">Instant Ecosystem Discovery & 10 Compliant Payment Rails</p>
+          </div>
+        </div>
+        <button id="btn-close-modal" class="text-stone-400 hover:text-white p-1 rounded-lg bg-stone-900 border border-stone-800 cursor-pointer text-lg">
+          ✕
+        </button>
+      </div>
+
+      <!-- 🔍 INLINE INSTANT SEARCH BAR -->
+      <div class="space-y-2">
+        <label for="airdrop-search-input" class="text-xs font-bold text-amber-300 flex items-center gap-1.5">
+          <span>🔍</span> Search Entire Ecosystem, Cinema Channels & Vaults
+        </label>
+        <div class="relative">
+          <input 
+            type="text" 
+            id="airdrop-search-input" 
+            placeholder="Type anything (e.g. 'Merlin', 'TON', 'Wallet', 'Live TV', 'Staking')..." 
+            class="w-full bg-[#131724] border border-stone-700 focus:border-amber-400 rounded-xl px-4 py-2.5 text-xs text-white placeholder:text-stone-500 outline-none shadow-inner"
+          />
+          <button id="btn-clear-search" class="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-stone-400 hover:text-white hidden">
+            Clear
+          </button>
+        </div>
+        <!-- Real-Time Filtered Search Results Dropdown -->
+        <div id="airdrop-search-results" class="bg-[#101420] border border-stone-800 rounded-xl p-2 max-h-48 overflow-y-auto space-y-1 hidden">
+          <!-- Dynamic results injected by app.js -->
+        </div>
+      </div>
+
+      <!-- 🎉 CLAIMED LUCKY AIRDROP USDT REWARD BANNER -->
+      <div id="airdrop-claim-banner" class="p-3.5 rounded-2xl bg-gradient-to-r from-emerald-950/80 via-[#0B1D1A] to-cyan-950/80 border border-emerald-500/50 flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <span class="text-2xl animate-spin">💎</span>
+          <div>
+            <div class="text-xs font-black text-emerald-300">Lucky Airdrop Harvest Claimed!</div>
+            <div id="airdrop-amount-text" class="text-[11px] text-stone-300 font-mono">+$25.00 USDT dispatched to Master Wallet</div>
+          </div>
+        </div>
+        <span class="px-2 py-0.5 rounded bg-emerald-500 text-stone-950 font-black text-[10px]">VERIFIED</span>
+      </div>
+
+      <!-- 💳 EXECUTIVE 10-PAYMENT METHOD SUITE ($2 INSTANT CHARGE TEST) -->
+      <div class="space-y-3">
+        <div class="flex items-center justify-between">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-stone-300">10 Global Payment Methods ($2 VIP Access)</h3>
+          <span class="text-[10px] text-amber-400 font-mono">All Countries Supported</span>
+        </div>
+
+        <!-- 1. OFFICIAL PAYPAL BUTTON CONTAINER -->
+        <div class="p-3 rounded-2xl bg-[#121623] border border-stone-800 space-y-2">
+          <div class="flex items-center justify-between text-xs font-bold text-white">
+            <span class="flex items-center gap-1.5">
+              <span class="text-blue-400">🅿️</span> PayPal & Major Credit/Debit Cards
+            </span>
+            <span class="text-amber-400 font-mono">$2.00 USD</span>
+          </div>
+          <!-- PayPal SDK Container (Renders Compliant Card / PayPal Buttons) -->
+          <div id="paypal-button-container" class="min-h-[44px]"></div>
+        </div>
+
+        <!-- 2. MOONPAY CARD GATEWAY BUTTON -->
+        <div class="p-3 rounded-2xl bg-[#121623] border border-stone-800 flex items-center justify-between">
+          <div>
+            <div class="text-xs font-bold text-white flex items-center gap-1.5">
+              <span class="text-purple-400">🌙</span> MoonPay Card-to-Crypto Rails
+            </div>
+            <p class="text-[10px] text-stone-400">Instant Visa, Mastercard, Apple Pay to Master Wallet</p>
+          </div>
+          <button id="btn-moonpay-checkout" class="px-3 py-1.5 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-xs rounded-xl shadow cursor-pointer transition">
+            Buy with Card →
+          </button>
+        </div>
+
+        <!-- 3. TON CONNECT 1-CLICK PAY -->
+        <div class="p-3 rounded-2xl bg-[#121623] border border-stone-800 flex items-center justify-between">
+          <div>
+            <div class="text-xs font-bold text-white flex items-center gap-1.5">
+              <span class="text-cyan-400">💎</span> TON / USDT On-Chain Transfer
+            </div>
+            <p class="text-[10px] text-stone-400">Tonkeeper, MyTonWallet, Telegram Wallet Direct</p>
+          </div>
+          <button id="btn-ton-instant-pay" class="px-3 py-1.5 bg-gradient-to-r from-cyan-600 to-teal-600 hover:from-cyan-500 hover:to-teal-500 text-white font-bold text-xs rounded-xl shadow cursor-pointer transition">
+            Pay 0.45 TON →
+          </button>
+        </div>
+
+        <!-- Additional Methods Badge Grid -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 text-[10px] text-center font-mono">
+          <div class="p-2 bg-stone-900/60 rounded-xl border border-stone-800 text-stone-300">Google Pay (GPay)</div>
+          <div class="p-2 bg-stone-900/60 rounded-xl border border-stone-800 text-stone-300">Apple Pay</div>
+          <div class="p-2 bg-stone-900/60 rounded-xl border border-stone-800 text-stone-300">Transak Fiat</div>
+          <div class="p-2 bg-stone-900/60 rounded-xl border border-stone-800 text-stone-300">Bybit Margin</div>
+        </div>
+
+        <!-- Security Guardrail Disclaimer (Strict Compliance) -->
+        <p class="text-[9px] text-stone-500 text-center leading-relaxed">
+          🔒 PCI-DSS Compliant Secure Gateway: Card transactions are processed directly via PayPal & MoonPay encrypted iframes. No raw credit card credentials or CVV numbers are stored on application servers.
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
