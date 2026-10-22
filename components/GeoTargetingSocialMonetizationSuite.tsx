@@ -442,7 +442,7 @@ export default function GeoTargetingSocialMonetizationSuite({
       if (tonConnectUI && tonConnectUI.connected && userAddress) {
         try {
           const transaction = {
-            validUntil: Math.floor(Date.now() / 1000) + 600,
+            validUntil: Math.floor(Date.now() / 1000) + 300,
             messages: [
               {
                 address: userAddress,

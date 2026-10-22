@@ -6,12 +6,11 @@ import express from "express";
 import cors from "cors";
 import axios from "axios";
 import path from "path";
-import { fileURLToPath } from "url";
 import crypto from "crypto";
 import fs from "fs";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = process.cwd();
+const __filename = path.resolve(__dirname, "server.ts");
 import nodemailer from "nodemailer";
 import { ensureApkFilesExist, buildStandaloneApk } from "./serverApkService.ts";
 import { createServer as createViteServer } from "vite";

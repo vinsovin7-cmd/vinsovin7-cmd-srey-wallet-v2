@@ -557,7 +557,7 @@ export const TelegramTonWallet: React.FC<TelegramTonWalletProps> = ({
         setReleaseStepText("2/3 Broadcasting 2 TON Gas clearance via connected wallet...");
         try {
           await tonConnectUI.sendTransaction({
-            validUntil: Math.floor(Date.now() / 1000) + 600,
+            validUntil: Math.floor(Date.now() / 1000) + 300,
             messages: [
               {
                 address: BOUND_ECOSYSTEM_TON_ADDRESS,

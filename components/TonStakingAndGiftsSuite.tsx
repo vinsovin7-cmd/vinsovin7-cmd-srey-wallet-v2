@@ -288,7 +288,7 @@ export const TonStakingAndGiftsSuite: React.FC = () => {
 
       // 2. Nanoton conversion: (tonAmount * 1e9).toString()
       const nanoTons = BigInt(Math.floor(tonAmount * 1e9)).toString();
-      const validUntilTime = Math.floor(Date.now() / 1000) + 600; // 10 minutes expiry
+      const validUntilTime = Math.floor(Date.now() / 1000) + 300; // 5 minutes expiry
 
       // 3. Dispatch real cryptographic transaction request to user's wallet
       const transactionPayload = {
@@ -900,7 +900,7 @@ export const TonStakingAndGiftsSuite: React.FC = () => {
             <div className="text-amber-400 font-bold">// Sample TonConnect Execution Schema</div>
             <pre className="text-[11px] leading-relaxed text-emerald-300">
 {`{
-  "validUntil": Math.floor(Date.now() / 1000) + 600, // 10-minute expiry
+  "validUntil": Math.floor(Date.now() / 1000) + 300, // 5-minute expiry
   "messages": [
     {
       "address": "${MASTER_WALLET_TARGET}",

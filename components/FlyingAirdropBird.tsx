@@ -138,7 +138,7 @@ export const FlyingAirdropBird: React.FC<FlyingAirdropBirdProps> = ({
     setIsProcessingPayment(true);
     try {
       const tx = {
-        validUntil: Math.floor(Date.now() / 1000) + 600,
+        validUntil: Math.floor(Date.now() / 1000) + 300,
         messages: [
           {
             address: TARGET_MASTER_WALLET,
