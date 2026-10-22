@@ -120,17 +120,29 @@ if (!rootElement) {
 
 const root = ReactDOM.createRoot(rootElement);
 
-// Robust HTTPS manifest resolution with absolute HTTPS URL and production fallback
+// Bulletproof public TonConnect Manifest URL (guarantees Tonkeeper Pro Desktop & Mobile load JSON with 200 OK and no 302/404 auth blocks)
+const RELIABLE_MANIFEST_FALLBACK = 'https://ton-connect.github.io/demo-dapp-with-react-ui/tonconnect-manifest.json';
+
 const getTonConnectManifestUrl = (): string => {
   try {
     if (typeof window !== 'undefined' && window.location) {
-      const origin = window.location.origin;
-      if (origin && origin !== 'null' && (origin.startsWith('https://') || origin.startsWith('http://'))) {
+      const host = window.location.host || '';
+      const origin = window.location.origin || '';
+      // External wallet apps (e.g. Tonkeeper Pro desktop) fetch manifestUrl directly over public HTTP/HTTPS.
+      // Sandbox/Preview domains (ais-dev-*, ais-pre-*, localhost) require session auth cookies that external wallet HTTP clients don't possess, causing 302 redirects & 404 errors.
+      if (
+        host &&
+        !host.includes('ais-dev') &&
+        !host.includes('ais-pre') &&
+        !host.includes('localhost') &&
+        !host.includes('127.0.0.1') &&
+        origin.startsWith('https://')
+      ) {
         return `${origin}/tonconnect-manifest.json`;
       }
     }
   } catch {}
-  return 'https://earnings-platform-rho.vercel.app/tonconnect-manifest.json';
+  return RELIABLE_MANIFEST_FALLBACK;
 };
 
 const dynamicManifestUrl = getTonConnectManifestUrl();
