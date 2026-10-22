@@ -1,38 +1,71 @@
 /* Sreymara Cinema & VIP Airdrop Mini App Styles */
 
-@keyframes flyBird {
+@keyframes flyBirdRealistic {
   0% {
-    transform: translate(-120px, 80px) scale(0.6) rotate(15deg);
+    transform: translate(-140px, 120px) scale(0.6) rotate(18deg);
     opacity: 0;
   }
-  15% {
-    transform: translate(15vw, 40px) scale(0.85) rotate(-5deg);
+  12% {
+    transform: translate(20vw, 40px) scale(0.85) rotate(-6deg);
     opacity: 1;
   }
-  35% {
-    transform: translate(35vw, 120px) scale(1) rotate(10deg);
+  30% {
+    transform: translate(45vw, 160px) scale(1) rotate(12deg);
   }
-  55% {
-    transform: translate(60vw, 60px) scale(1.1) rotate(-8deg);
+  50% {
+    transform: translate(75vw, 50px) scale(1.15) rotate(-10deg);
   }
-  75% {
-    transform: translate(80vw, 140px) scale(1) rotate(5deg);
+  70% {
+    transform: translate(50vw, 220px) scale(1) rotate(8deg);
   }
-  90% {
-    transform: translate(85vw, 70px) scale(1.05) rotate(0deg);
+  85% {
+    transform: translate(80vw, 80px) scale(1.05) rotate(-4deg);
   }
   100% {
-    transform: translate(82vw, 95px) scale(1) rotate(0deg);
+    transform: translate(82vw, 110px) scale(1) rotate(0deg);
     opacity: 1;
   }
 }
 
-@keyframes birdWingFlap {
+@keyframes birdWingFlapRealistic {
   0%, 100% {
-    transform: scaleY(1);
+    transform: scaleY(1) rotate(0deg);
+  }
+  25% {
+    transform: scaleY(0.3) rotate(22deg);
   }
   50% {
-    transform: scaleY(0.4) rotate(15deg);
+    transform: scaleY(1.2) rotate(-12deg);
+  }
+  75% {
+    transform: scaleY(0.4) rotate(18deg);
+  }
+}
+
+@keyframes radarPulse {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.9;
+    border-color: rgba(245, 158, 11, 0.9);
+  }
+  50% {
+    transform: scale(1.6);
+    opacity: 0.4;
+    border-color: rgba(16, 185, 129, 0.8);
+  }
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+    border-color: rgba(168, 85, 247, 0.2);
+  }
+}
+
+@keyframes handMonitoringHover {
+  0%, 100% {
+    transform: translate(14px, -18px) rotate(-10deg);
+  }
+  50% {
+    transform: translate(22px, -24px) rotate(10deg);
   }
 }
 
@@ -47,15 +80,15 @@
 
 @keyframes dropCrate {
   0% {
-    transform: translateY(0) scale(0.5);
+    transform: translateY(-40px) scale(0.4);
     opacity: 0;
   }
-  50% {
-    transform: translateY(60px) scale(1.1);
+  60% {
+    transform: translateY(15px) scale(1.1);
     opacity: 1;
   }
   100% {
-    transform: translateY(120px) scale(1);
+    transform: translateY(0px) scale(1);
     opacity: 1;
   }
 }
@@ -73,15 +106,15 @@
   position: absolute;
   top: 0;
   left: 0;
-  width: 72px;
-  height: 72px;
+  width: 76px;
+  height: 76px;
   display: flex;
   align-items: center;
   justify-content: center;
   pointer-events: auto;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(245, 158, 11, 0.25) 0%, rgba(13, 17, 26, 0.8) 70%);
-  border: 2px solid rgba(245, 158, 11, 0.8);
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.3) 0%, rgba(13, 17, 26, 0.85) 75%);
+  border: 2px solid rgba(245, 158, 11, 0.85);
   animation: glowPulse 2s infinite ease-in-out;
   cursor: pointer;
   transition: transform 0.3s ease;
@@ -89,21 +122,21 @@
 }
 
 .airdrop-bird-body.flying {
-  animation: flyBird 16s cubic-bezier(0.4, 0, 0.2, 1) forwards, glowPulse 2s infinite ease-in-out;
+  animation: flyBirdRealistic 22s cubic-bezier(0.34, 1.56, 0.64, 1) forwards, glowPulse 2s infinite ease-in-out;
 }
 
 .airdrop-bird-body.perched {
-  transform: translate(82vw, 95px) scale(1);
+  transform: translate(82vw, 110px) scale(1);
   animation: glowPulse 2.5s infinite ease-in-out;
 }
 
 .bird-wings {
   position: absolute;
-  inset: -6px;
+  inset: -8px;
   border-radius: 50%;
-  border-top: 3px solid #F59E0B;
-  border-bottom: 3px solid #10B981;
-  animation: birdWingFlap 0.4s infinite ease-in-out;
+  border-top: 3.5px solid #F59E0B;
+  border-bottom: 3.5px solid #10B981;
+  animation: birdWingFlapRealistic 0.35s infinite ease-in-out;
 }
 
 .bird-core {
@@ -114,20 +147,20 @@
 }
 
 .bird-emoji {
-  font-size: 32px;
-  filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.6));
+  font-size: 34px;
+  filter: drop-shadow(0 0 12px rgba(255, 215, 0, 0.7));
 }
 
 .bird-gift-pouch {
   position: absolute;
   bottom: -4px;
   right: -4px;
-  width: 24px;
-  height: 24px;
+  width: 26px;
+  height: 26px;
   background: linear-gradient(135deg, #10B981, #059669);
   color: #000;
   font-weight: 900;
-  font-size: 13px;
+  font-size: 14px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -136,10 +169,10 @@
   box-shadow: 0 0 10px rgba(16, 185, 129, 0.8);
 }
 
-/* Dropped Crate */
+/* Dropped Crate & Monitoring Hand (Screenshot 3) */
 .airdrop-crate {
   position: absolute;
-  top: 50px;
+  top: 60px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -147,8 +180,34 @@
 }
 
 .crate-glow {
-  font-size: 36px;
-  filter: drop-shadow(0 0 15px #F59E0B);
+  font-size: 38px;
+  filter: drop-shadow(0 0 18px #F59E0B);
+  position: relative;
+  z-index: 2;
+}
+
+/* Radar Scan Ring around parachute crate */
+.radar-scan-ring {
+  position: absolute;
+  top: 10px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 2px solid #F59E0B;
+  animation: radarPulse 1.8s infinite ease-out;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Monitoring Hand Effect */
+.monitoring-hand {
+  position: absolute;
+  top: -8px;
+  right: -12px;
+  font-size: 18px;
+  animation: handMonitoringHover 2s infinite ease-in-out;
+  filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.8));
+  z-index: 3;
 }
 
 .crate-label {
@@ -156,22 +215,23 @@
   font-weight: 900;
   color: #FCD34D;
   background: #000;
-  padding: 2px 6px;
+  padding: 2px 7px;
   border-radius: 6px;
   border: 1px solid #F59E0B;
   letter-spacing: 1px;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
 }
 
 /* Decorative Perch Element */
 .bird-perch-element {
   position: absolute;
-  top: 145px;
+  top: 160px;
   right: 12vw;
-  width: 110px;
+  width: 120px;
   height: 8px;
   background: linear-gradient(90deg, transparent, #78350F, #B45309, transparent);
   border-radius: 4px;
-  box-shadow: 0 0 10px rgba(180, 83, 9, 0.5);
+  box-shadow: 0 0 12px rgba(180, 83, 9, 0.6);
 }
 
 /* Smooth modal fade */
