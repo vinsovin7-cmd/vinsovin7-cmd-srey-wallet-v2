@@ -46,6 +46,48 @@ export const OFFICIAL_AL_JAZEERA_MIRRORS: CinemaMirror[] = [
   }
 ];
 
+export const MERLIN_MIRRORS: CinemaMirror[] = [
+  {
+    id: 'merlin-ep1',
+    name: 'Merlin Ep 1: The Dragon\'s Call',
+    url: 'https://www.youtube-nocookie.com/embed/fOqy-C0F4g4?autoplay=1&mute=0&controls=1&enablejsapi=1&rel=0&playsinline=1',
+    badge: 'BBC 1080P'
+  },
+  {
+    id: 'merlin-ep2',
+    name: 'Merlin Ep 2: Valiant & Camelot',
+    url: 'https://www.youtube-nocookie.com/embed/WJq5x2P_j90?autoplay=1&mute=0&controls=1&enablejsapi=1&rel=0&playsinline=1',
+    badge: 'HD CINEMA'
+  },
+  {
+    id: 'merlin-saga',
+    name: 'Merlin: Arthur & Dragon Complete Reel',
+    url: 'https://www.youtube-nocookie.com/embed/3Q9f5wQyG1c?autoplay=1&mute=0&controls=1&enablejsapi=1&rel=0&playsinline=1',
+    badge: 'MARATHON'
+  }
+];
+
+export const SEEKER_MIRRORS: CinemaMirror[] = [
+  {
+    id: 'seeker-ep1',
+    name: 'Legend of the Seeker Ep 1: Prophecy',
+    url: 'https://www.youtube-nocookie.com/embed/3e2o9mZ9rN0?autoplay=1&mute=0&controls=1&enablejsapi=1&rel=0&playsinline=1',
+    badge: 'ABC/DISNEY'
+  },
+  {
+    id: 'seeker-ep2',
+    name: 'Legend of the Seeker Ep 2: Destiny',
+    url: 'https://www.youtube-nocookie.com/embed/EomUeQ0pLrk?autoplay=1&mute=0&controls=1&enablejsapi=1&rel=0&playsinline=1',
+    badge: 'HD CINEMA'
+  },
+  {
+    id: 'seeker-saga',
+    name: 'Sword of Truth Complete Saga',
+    url: 'https://www.youtube-nocookie.com/embed/dGgO0V0L1aE?autoplay=1&mute=0&controls=1&enablejsapi=1&rel=0&playsinline=1',
+    badge: 'MARATHON'
+  }
+];
+
 export interface MasterCinemaPlayerProps {
   title?: string;
   mirrors?: CinemaMirror[];
@@ -97,10 +139,68 @@ export const MasterCinemaPlayerComponent: React.FC<MasterCinemaPlayerProps> = ({
   const bufferingTimerRef = useRef<NodeJS.Timeout | null>(null);
   const isPlayerPlayingRef = useRef<boolean>(isPlaying);
 
+  // Trigger feedback toast notification
+  const triggerHealToast = useCallback((msg: string) => {
+    setHealToastMessage(msg);
+    setTimeout(() => setHealToastMessage(null), 4000);
+  }, []);
+
+  // Stable postMessage Dispatcher (Defined before effects to prevent TDZ/initialization errors)
+  const sendIframeCommand = useCallback((func: string, args: any[] = []) => {
+    if (iframeRef.current && iframeRef.current.contentWindow) {
+      try {
+        iframeRef.current.contentWindow.postMessage(
+          JSON.stringify({ event: 'command', func, args }),
+          '*'
+        );
+      } catch (err) {
+        // ignore cross-origin postMessage warnings
+      }
+    }
+  }, []);
+
   // Keep ref in sync without re-triggering effects
   useEffect(() => {
     isPlayerPlayingRef.current = isPlayerPlaying;
   }, [isPlayerPlaying]);
+
+  // Synchronize mirror index when mirrors array or initial index changes
+  useEffect(() => {
+    setActiveMirrorIdx(initialMirrorIndex || 0);
+  }, [initialMirrorIndex, mirrors]);
+
+  // Synchronize parent isPlaying prop with iframe video playback
+  useEffect(() => {
+    setIsPlayerPlaying(isPlaying);
+    if (isPlaying) {
+      sendIframeCommand('playVideo');
+    } else {
+      sendIframeCommand('pauseVideo');
+    }
+  }, [isPlaying, sendIframeCommand]);
+
+  // Dual Cinema Attention Controller (Cross-Stream event router)
+  useEffect(() => {
+    const handleDualControl = (e: any) => {
+      const detail = e.detail;
+      if (!detail) return;
+      if (detail.action === 'PAUSE_AL_JAZEERA') {
+        sendIframeCommand('pauseVideo');
+        setIsPlayerPlaying(false);
+        onPlayStateChange?.(false);
+        triggerHealToast("⏸️ Al Jazeera Paused • Focus switched to Merlin");
+      } else if (detail.action === 'PLAY_AL_JAZEERA' || detail.action === 'FOCUS_AL_JAZEERA') {
+        sendIframeCommand('unMute');
+        sendIframeCommand('setVolume', [volume || 80]);
+        sendIframeCommand('playVideo');
+        setIsPlayerPlaying(true);
+        onPlayStateChange?.(true);
+        triggerHealToast("▶️ Al Jazeera Live Resumed • 80% Audio Active");
+      }
+    };
+    window.addEventListener('dual_cinema_control', handleDualControl);
+    return () => window.removeEventListener('dual_cinema_control', handleDualControl);
+  }, [sendIframeCommand, volume, onPlayStateChange, triggerHealToast]);
 
   // --------------------------------------------------------------------------
   // 1. MULTI-TAB & MULTI-SESSION SYNCHRONIZATION GUARD
@@ -202,22 +302,6 @@ export const MasterCinemaPlayerComponent: React.FC<MasterCinemaPlayerProps> = ({
   };
 
   // --------------------------------------------------------------------------
-  // 2. STABLE POSTMESSAGE DISPATCHER
-  // --------------------------------------------------------------------------
-  const sendIframeCommand = useCallback((func: string, args: any[] = []) => {
-    if (iframeRef.current && iframeRef.current.contentWindow) {
-      try {
-        iframeRef.current.contentWindow.postMessage(
-          JSON.stringify({ event: 'command', func, args }),
-          '*'
-        );
-      } catch (err) {
-        // ignore cross-origin postMessage warnings
-      }
-    }
-  }, []);
-
-  // --------------------------------------------------------------------------
   // 3. AI CINEMA TURBO-HEAL & LIVE EDGE RECOVERY SEQUENCE (2-3 SECONDS FIX)
   // --------------------------------------------------------------------------
   const handleAiCinemaTurboHeal = useCallback(() => {
@@ -245,12 +329,7 @@ export const MasterCinemaPlayerComponent: React.FC<MasterCinemaPlayerProps> = ({
     setTimeout(() => {
       setIsAiHealing(false);
     }, 2200);
-  }, [sendIframeCommand, volume, onPlayStateChange]);
-
-  const triggerHealToast = (msg: string) => {
-    setHealToastMessage(msg);
-    setTimeout(() => setHealToastMessage(null), 4000);
-  };
+  }, [sendIframeCommand, volume, onPlayStateChange, triggerHealToast]);
 
   // --------------------------------------------------------------------------
   // 4. AUTOMATIC STUTTER / BUFFER STALL AUTO-MONITOR
@@ -388,6 +467,29 @@ export const MasterCinemaPlayerComponent: React.FC<MasterCinemaPlayerProps> = ({
           sendIframeCommand('playVideo');
         }}
       />
+
+      {/* FLOATING ARROW ATTENTION BADGE: Tap to pause Al Jazeera and focus on Merlin */}
+      <div className="absolute top-3 left-3 z-20 flex items-center gap-2">
+        <button
+          type="button"
+          onClick={() => {
+            if (isPlayerPlaying) {
+              window.dispatchEvent(new CustomEvent('dual_cinema_control', { detail: { action: 'FOCUS_MERLIN' } }));
+            } else {
+              window.dispatchEvent(new CustomEvent('dual_cinema_control', { detail: { action: 'FOCUS_AL_JAZEERA' } }));
+            }
+          }}
+          className="px-3 py-1.5 bg-black/85 hover:bg-stone-900 border-2 border-cyan-400 text-cyan-300 font-mono font-bold text-[11px] rounded-xl shadow-[0_0_20px_rgba(6,182,212,0.65)] cursor-pointer flex items-center gap-1.5 transition active:scale-95 group/arrow backdrop-blur-sm"
+          title="Click to pause Al Jazeera and focus 100% on Merlin Season 1"
+        >
+          <span className="text-sm font-black text-amber-400 animate-bounce">
+            {isPlayerPlaying ? "↖️" : "▶️"}
+          </span>
+          <span className="text-white font-black group-hover/arrow:text-cyan-300">
+            {isPlayerPlaying ? "PAUSE AL JAZEERA (WATCH MERLIN)" : "RESUME AL JAZEERA LIVE"}
+          </span>
+        </button>
+      </div>
 
       {/* 2. SECONDARY TAB OVERLAY (Saves bandwidth & stops audio cracking across multiple tabs) */}
       {!isPrimaryTab && (

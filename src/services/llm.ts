@@ -1,6 +1,6 @@
 import { GoogleGenAI } from '@google/genai';
-import { AgentResponse, AgentResponseSchema, CircuitBreakerStatus } from '../types/agent';
-import { COGNITIVE_GUARDRAIL_SYSTEM_INSTRUCTION } from './aiValidationGuardrail';
+import { AgentResponseSchema, type AgentResponse, type CircuitBreakerStatus } from '../types/agent.ts';
+import { COGNITIVE_GUARDRAIL_SYSTEM_INSTRUCTION } from './aiValidationGuardrail.ts';
 
 // Simple in-memory Circuit Breaker State tracking
 let failureCount = 0;

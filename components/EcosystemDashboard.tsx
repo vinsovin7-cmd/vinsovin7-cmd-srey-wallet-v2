@@ -227,7 +227,7 @@ export const EcosystemDashboard: React.FC<EcosystemDashboardProps> = ({
   const [cliLogs, setCliLogs] = useState<Array<{ type: "cmd" | "out" | "err"; text: string }>>([
     { 
       type: "out", 
-      text: "[ECOSYSTEM HEAVENLY PARADISE CLI v3.8 - MULTIMODAL READY]\nConnected to Shopify Client ID: 5144661590b6f29869cd1cdae3248074\nPhantom Master Wallet: 5uYJ...5DRL (Solana SPL Connected)\nTelegram Dispatcher: Active (@wallet / 30-min interval)\nTip: You can type commands or PASTE AN IMAGE (Ctrl+V) directly into this CLI for Gemini vision diagnosis!\nType 'help' or 'telemetry' for live ecosystem telemetry." 
+      text: "[ECOSYSTEM HEAVENLY PARADISE CLI v3.8 - MULTIMODAL READY]\nConnected to Shopify Client ID: 5144661590b6f29869cd1cdae3248074\nPhantom Master Wallet: 8bpV9T3qdHTVDWdSsvVwu3e6pbJVUqwN3M8vsj6TVNbX (Solana SPL Connected)\nTelegram Dispatcher: Active (@wallet / 30-min interval)\nTip: You can type commands or PASTE AN IMAGE (Ctrl+V) directly into this CLI for Gemini vision diagnosis!\nType 'help' or 'telemetry' for live ecosystem telemetry." 
     }
   ]);
 
@@ -261,31 +261,35 @@ export const EcosystemDashboard: React.FC<EcosystemDashboardProps> = ({
 
   useEffect(() => {
     fetchStats();
-    const interval = setInterval(fetchStats, 2000);
+    const interval = setInterval(() => {
+      if (typeof document !== "undefined" && document.visibilityState === "visible") {
+        fetchStats();
+      }
+    }, 12000);
     return () => clearInterval(interval);
   }, []);
 
   // 80/20 Revenue video update ticker (simulates video timeupdate events)
   useEffect(() => {
     const videoTicker = setInterval(async () => {
-      if (activeTab === "cinema") {
+      if (activeTab === "cinema" && typeof document !== "undefined" && document.visibilityState === "visible") {
         try {
           const res = await fetch("/api/cinema/video-timeupdate", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ timeDiff: 2, earningsRate: 0.05 }),
+            body: JSON.stringify({ timeDiff: 8, earningsRate: 0.05 }),
           });
           if (res.ok) {
             const data = await res.json();
             setUserShareAccumulated(data.totalUserBalance);
             setPlatformReserveAccumulated(data.totalPlatformReserve);
-            setTotalSecondsWatched(prev => prev + 2);
+            setTotalSecondsWatched(prev => prev + 8);
           }
         } catch (e) {
           // ignore
         }
       }
-    }, 2000);
+    }, 8000);
     return () => clearInterval(videoTicker);
   }, [activeTab]);
 
@@ -677,7 +681,7 @@ export const EcosystemDashboard: React.FC<EcosystemDashboardProps> = ({
   const shopifyClientId = stats?.clientId || "5144661590b6f29869cd1cdae3248074";
   const shopDomain = stats?.shopDomain || "earnings.ink";
   const activeDeploymentUrl = telemetryData?.activeDeploymentUrl || "https://ais-dev-yri2x2xif26llxnhpuguzk-152195627325.asia-east1.run.app";
-  const phantomAddr = stats?.phantomWallet?.address || "5uYJ7kP9xM8v3Q1n2L5s4A6b8C9d0e1F2G3h4i5j6k7L";
+  const phantomAddr = stats?.phantomWallet?.address || "8bpV9T3qdHTVDWdSsvVwu3e6pbJVUqwN3M8vsj6TVNbX";
   const totalRev = stats?.totalRevenueRecorded || 845.50;
   const currentCh = stats?.cinemaChannels?.[currentChannelIdx] || {
     id: 1,
@@ -2222,7 +2226,7 @@ export const EcosystemDashboard: React.FC<EcosystemDashboardProps> = ({
                       type="text"
                       value={customPhantomAddr}
                       onChange={(e) => setCustomPhantomAddr(e.target.value)}
-                      placeholder="Paste your Phantom wallet address (e.g., 5uYJ7kP9xM...)"
+                      placeholder="Paste your Phantom wallet address (e.g., 8bpV9T3q...)"
                       className="flex-1 min-w-[280px] bg-stone-900 border border-stone-800 rounded-lg px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-purple-500"
                     />
                     <button

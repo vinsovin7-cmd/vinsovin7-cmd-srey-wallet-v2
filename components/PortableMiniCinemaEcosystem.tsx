@@ -1887,6 +1887,40 @@ export const PortableMiniCinemaEcosystem: React.FC<PortableMiniCinemaEcosystemPr
     }
   }, [isMuted, speakerVolume, playerMode]);
 
+  // Dual Cinema Attention Controller (Cross-Stream event router for Merlin)
+  useEffect(() => {
+    const handleDualControl = (e: any) => {
+      const detail = e.detail;
+      if (!detail) return;
+      if (detail.action === 'PAUSE_MERLIN') {
+        setIsPlaying(false);
+        const el = document.getElementById("cinema-player-iframe") as HTMLIFrameElement;
+        if (el && el.contentWindow) {
+          el.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+        }
+        if (videoRef.current) {
+          videoRef.current.pause();
+        }
+      } else if (detail.action === 'PLAY_MERLIN' || detail.action === 'FOCUS_MERLIN') {
+        setIsPlaying(true);
+        setIsMuted(false);
+        setAudioUnmutePromptDismissed(true);
+        const el = document.getElementById("cinema-player-iframe") as HTMLIFrameElement;
+        if (el && el.contentWindow) {
+          el.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+          el.contentWindow.postMessage('{"event":"command","func":"unMute","args":""}', '*');
+          el.contentWindow.postMessage(`{"event":"command","func":"setVolume","args":[${speakerVolume || 80}]}`, '*');
+        }
+        if (videoRef.current) {
+          videoRef.current.muted = false;
+          videoRef.current.play().catch(() => {});
+        }
+      }
+    };
+    window.addEventListener('dual_cinema_control', handleDualControl);
+    return () => window.removeEventListener('dual_cinema_control', handleDualControl);
+  }, [speakerVolume]);
+
   const handleSelectMerlinEpisode = (index: number) => {
     setMerlinEpisodeIndex(index);
     setSelectedMediaId("merlin");
@@ -2748,6 +2782,18 @@ export const PortableMiniCinemaEcosystem: React.FC<PortableMiniCinemaEcosystemPr
                 <span>HIDE TAB</span>
                 <ChevronDown size={11} />
               </button>
+
+              {/* Instant Close X Icon (Click when you don't want to see it, instant hide/close) */}
+              <button
+                id="btn-close-mini-cinema-x"
+                type="button"
+                onClick={toggleVisibility}
+                className="w-6 h-6 bg-red-700/90 hover:bg-red-600 text-white hover:text-amber-200 font-black rounded-lg border border-red-400/80 shadow flex items-center justify-center cursor-pointer transition-transform hover:scale-110 active:scale-95"
+                title="Close / Hide Portable Mini Cinema"
+                aria-label="Close Portable Mini Cinema"
+              >
+                <X size={14} className="stroke-[3]" />
+              </button>
             </div>
           </div>
 
@@ -3218,6 +3264,29 @@ export const PortableMiniCinemaEcosystem: React.FC<PortableMiniCinemaEcosystemPr
                         } catch {}
                       }}
                     />
+
+                    {/* FLOATING ARROW ATTENTION BADGE: Tap to pause Merlin and focus on Al Jazeera */}
+                    <div className="absolute top-2 right-2 z-30 flex items-center gap-1.5 pointer-events-auto">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (isPlaying) {
+                            window.dispatchEvent(new CustomEvent('dual_cinema_control', { detail: { action: 'FOCUS_AL_JAZEERA' } }));
+                          } else {
+                            window.dispatchEvent(new CustomEvent('dual_cinema_control', { detail: { action: 'FOCUS_MERLIN' } }));
+                          }
+                        }}
+                        className="px-2.5 py-1 bg-black/90 hover:bg-stone-900 border border-amber-400 text-amber-300 font-mono font-bold text-[10px] rounded-lg shadow-[0_0_15px_rgba(251,191,36,0.7)] cursor-pointer flex items-center gap-1 transition active:scale-95 group/arrow"
+                        title="Click to pause Merlin and focus 100% on Al Jazeera Live News"
+                      >
+                        <span className="text-xs font-black text-amber-300 animate-bounce">
+                          {isPlaying ? "↘️" : "▶️"}
+                        </span>
+                        <span className="text-white font-black group-hover/arrow:text-amber-300">
+                          {isPlaying ? "PAUSE MERLIN (WATCH AL JAZEERA)" : "RESUME MERLIN MOVIE"}
+                        </span>
+                      </button>
+                    </div>
                   </div>
                 ) : (
                   <div className="relative w-full h-full overflow-hidden flex items-center justify-center bg-black select-none">

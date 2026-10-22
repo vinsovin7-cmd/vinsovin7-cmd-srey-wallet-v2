@@ -1,6 +1,6 @@
 // bots/autoReplyEngine.ts
 import { Telegraf, Markup } from 'telegraf';
-import { isAddressQuarantined } from '../src/services/securityQuarantine.js';
+import { isAddressQuarantined } from '../src/services/securityQuarantine.ts';
 
 // RESTORED: Telegraf Bot Token for @gemini_sreymara_bot
 const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || process.env.PROCESS_ENV_BOT_TOKEN || "8513756424:AAFBTFeIiQA5fglLOz4HXxSixylSwGjGsgA";

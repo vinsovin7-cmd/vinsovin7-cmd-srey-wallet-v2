@@ -71,7 +71,7 @@ export const AIStudioShell: React.FC<AIStudioShellProps> = ({ children }) => {
       { id: 1, type: "info", title: "Three.js Quantum Scene Initialized", detail: "GPU Shader compiled (60 FPS @ 1080p)", time: "0.2s ago" },
       { id: 2, type: "info", title: "Shopify + Tidio Webhook Listener Active", detail: "Listening on /api/tidio/signal", time: "1.1s ago" },
       { id: 3, type: "warning", title: "HMR Disabled for Agent Stability", detail: "Control plane set DISABLE_HMR=true as expected", time: "3.5s ago" },
-      { id: 4, type: "info", title: "Phantom Web3 Provider Ready", detail: "Linked Address: 5uYJ7k...6k7L", time: "5.0s ago" },
+      { id: 4, type: "warning", title: "Compromised Address Quarantined & Disconnected", detail: "Compromised address purged. Awaiting secure replacement address.", time: "Just now" },
       { id: 5, type: "info", title: "US Mail Server Proxy Connected", detail: "Server: us-east-1.mail.com (SSL Latency 14ms)", time: "8.2s ago" },
       { id: 6, type: "info", title: "Multi Sreymara AI Model Ready", detail: "Pro Email & PDF Generator Online", time: "10.0s ago" }
     ]

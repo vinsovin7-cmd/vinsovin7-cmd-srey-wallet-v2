@@ -206,7 +206,7 @@ export const SreyWalletApp: React.FC<SreyWalletAppProps> = ({
 
   // If no account exists, render the cryptographic Onboarding Flow!
   if (!activeAccount) {
-    return <SreyWalletOnboarding onComplete={handleOnboardingComplete} />;
+    return <SreyWalletOnboarding onComplete={handleOnboardingComplete} onClose={onClose} />;
   }
 
   // Calculate Total Balance in USD

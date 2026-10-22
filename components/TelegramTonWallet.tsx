@@ -142,7 +142,7 @@ export const TelegramTonWallet: React.FC<TelegramTonWalletProps> = ({
       chain: "SOLANA",
       name: "Solana Network (SPL)",
       symbol: "SOL / USDT",
-      address: "5uYJ7k2NqX8mP9vL1z3k4w5r6s7t8u9v0w1x2y3z4a5b",
+      address: "8bpV9T3qdHTVDWdSsvVwu3e6pbJVUqwN3M8vsj6TVNbX",
       balance: 1.45,
       usdRate: 154.20,
       icon: "⚡"

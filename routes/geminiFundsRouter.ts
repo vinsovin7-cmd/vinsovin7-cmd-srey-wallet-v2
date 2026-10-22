@@ -1,4 +1,4 @@
-import { Router, Request, Response } from "express";
+import express, { type Request, type Response } from "express";
 import {
   getGeminiFundsState,
   executeAiDecisionCycle,
@@ -6,9 +6,9 @@ import {
   retryQuarantinedTx,
   updateTollFeeConfig,
   geminiFundsEvents
-} from "../src/services/geminiFundsEngine.js";
+} from "../src/services/geminiFundsEngine.ts";
 
-const router = Router();
+const router = express.Router();
 
 // 1. Full Gemini Funds State & KPI Metrics
 router.get("/overview", (req: Request, res: Response) => {

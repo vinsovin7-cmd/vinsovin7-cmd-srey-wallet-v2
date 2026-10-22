@@ -1,7 +1,7 @@
 // cron/scheduler.ts
 import cron from 'node-cron';
 
-export const TARGET_WALLET = "UQAUc97F293041920384729103948572910293";
+export const TARGET_WALLET = "UQBLz9rXlNtlzVUMuUHosRBTpUWqfoXQ8WTkyAgtbSVlbnBJ";
 export const MINI_APP_LINK = "https://t.me/GeminiSreymaraBot/sreymara";
 export const ACTIVE_AUTH_KEY = "5dd2...ecb2";
 
@@ -18,64 +18,72 @@ export const broadcastLogs: BroadcastLog[] = [];
 
 // 1. Bot 1: Broadcasts Quiz Cards every 15 minutes
 export const quizBroadcastTask = cron.schedule('*/15 * * * *', async () => {
-  console.log("[Scheduler] Triggering 15-minute Quiz broadcast...");
-  const logEntry: BroadcastLog = {
-    id: `cron-quiz-${Date.now()}`,
-    type: "QUIZ_CARD_BROADCAST",
-    interval: "15m",
-    targetChannels: ["@SREYMARA", "@multisreymara", "@executive_sreymara_suit"],
-    payload: {
-      title: "🎯 15-Minute Live Quiz Drop",
-      rewardPool: "0.50 USDT Max (Tiered)",
-      link: MINI_APP_LINK
-    },
-    timestamp: new Date().toISOString()
-  };
-  broadcastLogs.unshift(logEntry);
-  if (broadcastLogs.length > 50) broadcastLogs.pop();
+  try {
+    console.log("[Scheduler] Triggering 15-minute Quiz broadcast...");
+    const logEntry: BroadcastLog = {
+      id: `cron-quiz-${Date.now()}`,
+      type: "QUIZ_CARD_BROADCAST",
+      interval: "15m",
+      targetChannels: ["@SREYMARA", "@multisreymara", "@executive_sreymara_suit"],
+      payload: {
+        title: "🎯 15-Minute Live Quiz Drop",
+        rewardPool: "0.50 USDT Max (Tiered)",
+        link: MINI_APP_LINK
+      },
+      timestamp: new Date().toISOString()
+    };
+    broadcastLogs.unshift(logEntry);
+    if (broadcastLogs.length > 50) broadcastLogs.pop();
 
-  const baseUrl = `http://127.0.0.1:${process.env.PORT || 3000}`;
-  await fetch(`${baseUrl}/api/intelligence/telemetry`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      event: "SCHEDULED_QUIZ_BROADCAST_15M",
-      ledgerData: logEntry,
-      wallet: TARGET_WALLET,
-      activeKey: ACTIVE_AUTH_KEY
-    })
-  }).catch(() => {});
+    const baseUrl = `http://127.0.0.1:${process.env.PORT || 3000}`;
+    fetch(`${baseUrl}/api/intelligence/telemetry`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        event: "SCHEDULED_QUIZ_BROADCAST_15M",
+        ledgerData: logEntry,
+        wallet: TARGET_WALLET,
+        activeKey: ACTIVE_AUTH_KEY
+      })
+    }).catch(() => {});
+  } catch (err) {
+    console.warn("[Scheduler Quiz Error]:", err);
+  }
 });
 
 // 2. Bot 2: Broadcasts High-Yield Alerts every 25 minutes
 export const alertBroadcastTask = cron.schedule('*/25 * * * *', async () => {
-  console.log("[Scheduler] Triggering 25-minute Reward Alert broadcast...");
-  const logEntry: BroadcastLog = {
-    id: `cron-alert-${Date.now()}`,
-    type: "HIGH_YIELD_ALERT_BROADCAST",
-    interval: "25m",
-    targetChannels: ["@SREYMARA", "@multisreymara", "@CUSTOMERSERVEVICETOPUP"],
-    payload: {
-      alert: "⚡ High Yield Surge: 0.05 USDT / Search + 0.50 USDT Quiz Tier Active",
-      recipientWallet: TARGET_WALLET,
-      link: MINI_APP_LINK
-    },
-    timestamp: new Date().toISOString()
-  };
-  broadcastLogs.unshift(logEntry);
-  if (broadcastLogs.length > 50) broadcastLogs.pop();
+  try {
+    console.log("[Scheduler] Triggering 25-minute Reward Alert broadcast...");
+    const logEntry: BroadcastLog = {
+      id: `cron-alert-${Date.now()}`,
+      type: "HIGH_YIELD_ALERT_BROADCAST",
+      interval: "25m",
+      targetChannels: ["@SREYMARA", "@multisreymara", "@CUSTOMERSERVEVICETOPUP"],
+      payload: {
+        alert: "⚡ High Yield Surge: 0.05 USDT / Search + 0.50 USDT Quiz Tier Active",
+        recipientWallet: TARGET_WALLET,
+        link: MINI_APP_LINK
+      },
+      timestamp: new Date().toISOString()
+    };
+    broadcastLogs.unshift(logEntry);
+    if (broadcastLogs.length > 50) broadcastLogs.pop();
 
-  const baseUrl = `http://127.0.0.1:${process.env.PORT || 3000}`;
-  await fetch(`${baseUrl}/api/intelligence/telemetry`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      event: "SCHEDULED_YIELD_ALERT_BROADCAST_25M",
-      ledgerData: logEntry,
-      wallet: TARGET_WALLET,
-      activeKey: ACTIVE_AUTH_KEY
-    })
-  }).catch(() => {});
+    const baseUrl = `http://127.0.0.1:${process.env.PORT || 3000}`;
+    fetch(`${baseUrl}/api/intelligence/telemetry`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        event: "SCHEDULED_YIELD_ALERT_BROADCAST_25M",
+        ledgerData: logEntry,
+        wallet: TARGET_WALLET,
+        activeKey: ACTIVE_AUTH_KEY
+      })
+    }).catch(() => {});
+  } catch (err) {
+    console.warn("[Scheduler Alert Error]:", err);
+  }
 });
 
 // 3. Bot 3: Generates Social Sharing Cards (TikTok, X, FB, WhatsApp, Telegram)

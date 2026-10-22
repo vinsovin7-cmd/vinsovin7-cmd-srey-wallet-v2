@@ -11,6 +11,10 @@ export default defineConfig(({ mode }) => {
         hmr: false,
       },
       plugins: [react()],
+      build: {
+        outDir: path.resolve(__dirname, 'dist'),
+        emptyOutDir: true,
+      },
       define: {
         'process.env.API_KEY': JSON.stringify(env.GEMINI_API_KEY),
         'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY)

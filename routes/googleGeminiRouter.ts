@@ -1,7 +1,7 @@
 import { Router } from "express";
 import crypto from "crypto";
 import { GoogleGenAI } from "@google/genai";
-import { isAddressQuarantined } from "../src/services/securityQuarantine.js";
+import { isAddressQuarantined } from "../src/services/securityQuarantine.ts";
 
 const googleGeminiRouter = Router();
 

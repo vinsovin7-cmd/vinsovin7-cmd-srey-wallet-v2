@@ -664,7 +664,7 @@ export const ScoMonetizationSuite: React.FC<ScoMonetizationSuiteProps> = ({
                       type="text"
                       value={editSolWallet}
                       onChange={(e) => setEditSolWallet(e.target.value)}
-                      placeholder="e.g. 5uYJ...5DRL"
+                      placeholder="Paste secure Solana address (e.g. 7xKX...asU)"
                       className="w-full bg-stone-950 border border-stone-700 rounded-lg px-3 py-2 text-stone-100 font-mono text-xs focus:border-amber-400 outline-none"
                     />
                   </div>

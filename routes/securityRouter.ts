@@ -4,8 +4,8 @@ import {
   COMPROMISED_QUARANTINE_LIST, 
   isAddressQuarantined, 
   incidentAuditLogs 
-} from "../src/services/securityQuarantine.js";
-import { userSessions } from "../src/services/aiValidationGuardrail.js";
+} from "../src/services/securityQuarantine.ts";
+import { userSessions } from "../src/services/aiValidationGuardrail.ts";
 
 const securityRouter = Router();
 

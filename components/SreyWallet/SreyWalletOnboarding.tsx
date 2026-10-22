@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import { ShieldCheck, Lock, Copy, Check, ArrowRight, KeyRound, AlertTriangle, Sparkles, RefreshCw, Eye, EyeOff, CheckCircle2 } from 'lucide-react';
+import { ShieldCheck, Lock, Copy, Check, ArrowRight, KeyRound, AlertTriangle, Sparkles, RefreshCw, Eye, EyeOff, CheckCircle2, X } from 'lucide-react';
 import { generate24WordMnemonic, isValidMnemonic, deriveAddressesFromMnemonic, SreyAccount } from './sreyWalletStore';
 
 interface SreyWalletOnboardingProps {
   onComplete: (account: SreyAccount) => void;
+  onClose?: () => void;
 }
 
-export const SreyWalletOnboarding: React.FC<SreyWalletOnboardingProps> = ({ onComplete }) => {
+export const SreyWalletOnboarding: React.FC<SreyWalletOnboardingProps> = ({ onComplete, onClose }) => {
   const [step, setStep] = useState<'splash' | 'backup' | 'verify' | 'import'>('splash');
   const [generatedPhrase, setGeneratedPhrase] = useState<string>('');
   const [words, setWords] = useState<string[]>([]);
@@ -114,6 +115,18 @@ export const SreyWalletOnboarding: React.FC<SreyWalletOnboardingProps> = ({ onCo
       {/* 1. SPLASH SCREEN */}
       {step === 'splash' && (
         <div className="relative z-10 flex-1 flex flex-col justify-between p-6 max-w-md mx-auto w-full">
+          {/* Prominent Close X Button */}
+          {onClose && (
+            <button
+              type="button"
+              onClick={onClose}
+              className="absolute top-4 right-4 z-30 w-10 h-10 rounded-full bg-stone-900/90 border-2 border-stone-700 hover:border-amber-400 text-stone-300 hover:text-white flex items-center justify-center transition cursor-pointer shadow-2xl hover:scale-105 active:scale-95"
+              title="Close Srey Wallet & Return to Dashboard"
+            >
+              <X size={20} className="text-stone-200" />
+            </button>
+          )}
+
           {/* Header */}
           <div className="flex items-center justify-center pt-8 pb-4">
             <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-stone-900/90 border border-amber-500/30 text-amber-300 text-[11px] font-mono tracking-wider">

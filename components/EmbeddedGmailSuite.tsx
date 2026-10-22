@@ -131,7 +131,11 @@ export function EmbeddedGmailSuite() {
 
   useEffect(() => {
     syncGmailBotMessages();
-    const timer = setInterval(syncGmailBotMessages, 4000);
+    const timer = setInterval(() => {
+      if (typeof document !== "undefined" && document.visibilityState === "visible") {
+        syncGmailBotMessages();
+      }
+    }, 15000);
     return () => clearInterval(timer);
   }, []);
 

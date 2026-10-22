@@ -18,6 +18,7 @@ import { CloudflareDomainManager } from './components/CloudflareDomainManager';
 import { GoogleVisitorSignInModal, VisitorRecord } from './components/GoogleVisitorSignInModal';
 import { EcosystemVisitorRecordsSuite } from './components/EcosystemVisitorRecordsSuite';
 import { DatingArtsMatchmakingSuite } from './components/DatingArtsMatchmakingSuite';
+import { SreyLoveSuiteMatchmakingApp } from './components/SreyLoveSuiteMatchmakingApp';
 import { AndroidAppInstallerModal } from './components/AndroidAppInstallerModal';
 import { WebsiteToAppConverter } from './components/WebsiteToAppConverter';
 import { AdsGramTonPayoutSuite } from './components/AdsGramTonPayoutSuite';
@@ -40,6 +41,9 @@ import { VercelDeploymentHub } from './components/VercelDeploymentHub';
 import { LitmatchLandingPage } from './components/LitmatchLandingPage';
 import { TelegramMiniEcosystemWidget } from './components/TelegramMiniEcosystemWidget';
 import { GoogleExecutiveAccountSuite } from './components/GoogleExecutiveAccountSuite';
+import { SreymaraBrowserWorkspaceSuite } from './components/SreymaraBrowserWorkspaceSuite';
+import { ExecutiveSubSreymaraSuiteToast } from './components/ExecutiveSubSreymaraSuiteToast';
+import { LinkActivationOverlay } from './components/LinkActivationOverlay';
 import { googleSignIn, getActiveGoogleSession } from './src/lib/firebaseAuth';
 import { ShoppingBag, Mail, Sparkles, BookOpen, Layers, Globe, ShieldCheck, Activity, X, Eye, EyeOff, Maximize2, Minimize2, Coins, GitBranch, Wallet, Zap, Send, ExternalLink, Download, Share2, ChevronDown, ChevronUp, Grid, Smartphone, Crown, Lock, Video, Film, Users, UserCheck, Heart, Usb, Star, Mic, Bot, Building2, CreditCard, TrendingUp, MessageSquare, Radio, Cpu } from 'lucide-react';
 
@@ -152,6 +156,16 @@ const App: React.FC = () => {
       const pathname = window.location.pathname.toLowerCase();
       const hash = window.location.hash.toLowerCase();
       const href = window.location.href.toLowerCase();
+      const search = window.location.search.toLowerCase();
+
+      // Dedicated Cinema deep link detection (?tab=cinema, ?movie=..., ?channel=..., #cinema)
+      if (search.includes("cinema") || search.includes("movie") || search.includes("channel") || hash.includes("cinema")) {
+        return "cinema_video";
+      }
+      // Dedicated Srey Love Suite deep link detection (?tab=srey, ?tab=dating, #datingarts)
+      if (search.includes("dating") || hash.includes("datingarts")) {
+        return "datingarts";
+      }
       // Dedicated Litmatch Clone landing page detection (#litmatch, /litmatch)
       if (hash.includes("litmatch") || pathname.includes("litmatch")) {
         return "litmatch";
@@ -250,6 +264,21 @@ const App: React.FC = () => {
       }
     }
   }, [activeMainTab]);
+
+  // INSTANT FOCUS & AUTO-SCROLL ON TAB CLICK (Google / Microsoft Pro UX Standard)
+  useEffect(() => {
+    if (!isTabHidden && activeMainTab && activeMainTab !== "revenue") {
+      const timer = setTimeout(() => {
+        const target = document.getElementById("main-suite-viewport");
+        if (target) {
+          const yOffset = -80; // Offset for top sticky navbar
+          const y = target.getBoundingClientRect().top + window.pageYOffset + yOffset;
+          window.scrollTo({ top: Math.max(0, y), behavior: "smooth" });
+        }
+      }, 80);
+      return () => clearTimeout(timer);
+    }
+  }, [activeMainTab, isTabHidden]);
 
   useEffect(() => {
     localStorage.setItem("alphaqubit_is_tab_hidden", String(isTabHidden));
@@ -357,6 +386,61 @@ const App: React.FC = () => {
   }, []);
 
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [viewportMode, setViewportMode] = useState<'responsive' | 'mobile_phone' | 'panoramic'>('responsive');
+  const [liveTraffic, setLiveTraffic] = useState<{ totalClicks: number; totalShares: number; publisherRevenueUsdt: number }>({
+    totalClicks: 148,
+    totalShares: 64,
+    publisherRevenueUsdt: 735.60
+  });
+
+  const scrollContainerRef = React.useRef<HTMLDivElement>(null);
+  const navTabsContainerRef = React.useRef<HTMLDivElement>(null);
+
+  // Sync real-time traffic clicks and shares
+  useEffect(() => {
+    let isMounted = true;
+    const fetchLiveTraffic = async () => {
+      try {
+        const res = await fetch('/api/ecosystem/live-traffic-stats');
+        if (res.ok) {
+          const data = await res.json();
+          if (isMounted && data.totalClicks) {
+            setLiveTraffic({
+              totalClicks: data.totalClicks,
+              totalShares: data.totalShares,
+              publisherRevenueUsdt: data.totalPublisherBonusEarningsUsdt || 735.60
+            });
+          }
+        }
+      } catch {}
+    };
+
+    fetchLiveTraffic();
+    const interval = setInterval(fetchLiveTraffic, 8000);
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
+  }, []);
+
+  const scrollToLeftEnd = () => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTo({ left: 0, behavior: 'smooth' });
+    }
+  };
+
+  const scrollToRightEnd = () => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTo({ left: scrollContainerRef.current.scrollWidth, behavior: 'smooth' });
+    }
+  };
+
+  const scrollNavTabs = (direction: 'left' | 'right') => {
+    if (navTabsContainerRef.current) {
+      const offset = direction === 'left' ? -280 : 280;
+      navTabsContainerRef.current.scrollBy({ left: offset, behavior: 'smooth' });
+    }
+  };
 
   useEffect(() => {
     const handleFullscreenChange = () => {
@@ -401,8 +485,18 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[#05060A] text-stone-100 selection:bg-nobel-gold selection:text-black font-sans relative p-1 sm:p-2.5">
-      {/* LUXURIOUS BOLD BUILD FRAME WITH 7-COLOR STARS */}
-      <div className="relative rounded-[24px] sm:rounded-[32px] border-[3px] sm:border-4 border-amber-500/50 shadow-[0_0_80px_rgba(245,158,11,0.22)] bg-[#090A0E] overflow-hidden min-h-[calc(100vh-1rem)] flex flex-col ring-1 ring-amber-400/20">
+      {/* LUXURIOUS BOLD BUILD FRAME WITH 7-COLOR STARS - MOBILE & DESKTOP RESPONSIVE CANVAS */}
+      <div 
+        ref={scrollContainerRef}
+        id="ecosystem-master-scroll-container"
+        className={`relative rounded-[24px] sm:rounded-[32px] border-[3px] sm:border-4 border-amber-500/50 shadow-[0_0_80px_rgba(245,158,11,0.22)] bg-[#090A0E] overflow-x-auto overflow-y-visible min-h-[calc(100vh-1rem)] flex flex-col ring-1 ring-amber-400/20 scrollbar-thin scrollbar-thumb-amber-500/50 scrollbar-track-black transition-all ${
+          viewportMode === 'mobile_phone'
+            ? 'max-w-[430px] mx-auto shadow-[0_0_100px_rgba(245,158,11,0.6)]'
+            : viewportMode === 'panoramic'
+            ? 'min-w-[1350px]'
+            : 'w-full'
+        }`}
+      >
         
         {/* CELESTIAL CROWN WITH LUXURIOUS HIDDEN 7-COLOR STARS */}
         <div className="w-full bg-gradient-to-r from-[#12072B] via-[#090A14] to-[#14082D] border-b border-amber-500/30 px-3 sm:px-6 py-2 flex items-center justify-between flex-wrap gap-2 text-xs select-none">
@@ -523,6 +617,78 @@ const App: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-3 flex-wrap">
+            {/* LIVE REAL-TIME CLICKS & SHARES TELEMETRY BADGE */}
+            <div className="flex items-center gap-2 px-3 py-1.5 bg-black/80 rounded-xl border border-amber-500/50 text-[11px] font-mono shadow-md">
+              <span className="flex items-center gap-1 text-cyan-300 font-bold" title="Total Ecosystem Link Clicks">
+                <Globe size={13} className="text-cyan-400" />
+                <span>{liveTraffic.totalClicks} Clicks</span>
+              </span>
+              <span className="text-stone-600">•</span>
+              <span className="flex items-center gap-1 text-amber-300 font-bold" title="Total Verified Shares">
+                <Share2 size={13} className="text-amber-400" />
+                <span>{liveTraffic.totalShares} Shares</span>
+              </span>
+              <span className="text-stone-600">•</span>
+              <span className="text-emerald-400 font-black flex items-center gap-1" title="6X Publisher Traffic Boost Active">
+                <Zap size={12} className="fill-emerald-400 text-emerald-400" />
+                <span>6X ${liveTraffic.publisherRevenueUsdt.toFixed(2)} USDT</span>
+              </span>
+            </div>
+
+            {/* MOBILE & PANORAMIC VIEWPORT CONTROLLER */}
+            <div className="flex items-center gap-1 bg-[#12151E] p-1 rounded-xl border border-stone-800 text-[10px] font-mono">
+              <button
+                type="button"
+                onClick={() => setViewportMode('responsive')}
+                className={`px-2.5 py-1 rounded-lg font-bold cursor-pointer transition ${
+                  viewportMode === 'responsive' ? 'bg-amber-400 text-stone-950 font-black shadow' : 'text-stone-400 hover:text-white'
+                }`}
+                title="Responsive Fit View (Auto-scales seamlessly across any mobile or desktop screen)"
+              >
+                📱 Mobile Fit
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setViewportMode('mobile_phone')}
+                className={`px-2 py-1 rounded-lg font-bold cursor-pointer transition hidden sm:inline ${
+                  viewportMode === 'mobile_phone' ? 'bg-amber-400 text-stone-950 font-black shadow' : 'text-stone-400 hover:text-white'
+                }`}
+                title="Simulate Mobile Phone Frame (390px iPhone View)"
+              >
+                📲 Phone Frame
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setViewportMode('panoramic')}
+                className={`px-2.5 py-1 rounded-lg font-bold cursor-pointer transition ${
+                  viewportMode === 'panoramic' ? 'bg-amber-400 text-stone-950 font-black shadow' : 'text-stone-400 hover:text-white'
+                }`}
+                title="Panoramic Wide View: Freely scroll from far left to far right ending"
+              >
+                💻 Panoramic
+              </button>
+
+              <button
+                type="button"
+                onClick={scrollToLeftEnd}
+                className="px-2 py-1 rounded bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-700 cursor-pointer font-bold transition active:scale-95"
+                title="Scroll to Left Hand Ending of Ecosystem"
+              >
+                ◀ Left End
+              </button>
+
+              <button
+                type="button"
+                onClick={scrollToRightEnd}
+                className="px-2 py-1 rounded bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-700 cursor-pointer font-bold transition active:scale-95"
+                title="Scroll to Right Hand Ending of Ecosystem"
+              >
+                Right End ▶
+              </button>
+            </div>
+
             <VercelDeploymentHub />
             <TonWalletHeaderWidget />
           </div>
@@ -545,8 +711,21 @@ const App: React.FC = () => {
               </button>
             </div>
           ) : (
-            /* EXPANDED VIEW: Full Navigation Banner carrying all 11 quick-access tabs + V Hide Button at the far right ending */
-            <div className="flex items-center gap-2 bg-[#12151E] p-1.5 rounded-xl border border-stone-800 flex-wrap relative shadow-2xl">
+            /* EXPANDED VIEW: Full Navigation Banner with smooth horizontal scroll and Left/Right controls */
+            <div className="relative w-full">
+              <div 
+                ref={navTabsContainerRef}
+                className="flex items-center gap-2 bg-[#12151E] p-1.5 rounded-xl border border-stone-800 overflow-x-auto scrollbar-thin scrollbar-thumb-amber-500/40 relative shadow-2xl max-w-full"
+              >
+                {/* Scroll Nav Left Quick Button */}
+                <button
+                  type="button"
+                  onClick={() => scrollNavTabs('left')}
+                  className="p-1 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 hover:text-white border border-stone-700 cursor-pointer shrink-0"
+                  title="Scroll navigation bar left"
+                >
+                  ◀
+                </button>
               {/* Sreymara Queen Live Conversational AI Agent (Vertex AI & Gemini SDK) */}
               <button
                 id="btn-nav-sreymara-conversational"
@@ -804,7 +983,7 @@ const App: React.FC = () => {
                 <span className="px-1.5 py-0.5 bg-emerald-950 text-emerald-300 rounded text-[9px] font-mono border border-emerald-700 font-bold">5dd2</span>
               </button>
 
-              {/* DatingArts Matchmaking Suite Button */}
+              {/* SREY LOVE SUITE & Matchmaking Engine Button */}
               <button
                 id="btn-nav-datingarts"
                 onClick={() => {
@@ -816,11 +995,11 @@ const App: React.FC = () => {
                     ? "bg-gradient-to-r from-pink-600 via-rose-600 to-amber-500 text-white font-black shadow-lg border border-pink-400"
                     : "text-stone-400 hover:text-pink-300"
                 }`}
-                title="DatingArts Luxury Matchmaking & 100% Human Interaction Chat"
+                title="SREY LOVE SUITE: Executive Dating & AI Matchmaking Engine"
               >
-                <Heart size={14} className="text-pink-400 fill-pink-400" />
-                <span>DatingArts Matchmaking</span>
-                <span className="px-1.5 py-0.5 bg-pink-950 text-pink-300 rounded text-[9px] font-mono border border-pink-700 font-bold">100% REAL</span>
+                <Heart size={14} className="text-pink-400 fill-pink-400 animate-pulse" />
+                <span>Srey Love Suite</span>
+                <span className="px-1.5 py-0.5 bg-gradient-to-r from-amber-500 to-rose-600 text-white rounded text-[9px] font-mono font-black shadow">50 USDT BONUS</span>
               </button>
 
               <button
@@ -1110,7 +1289,17 @@ const App: React.FC = () => {
                 <span className="text-[11px] font-black uppercase tracking-wider text-red-100">V</span>
               </button>
 
+              {/* Scroll Nav Right Quick Button */}
+              <button
+                type="button"
+                onClick={() => scrollNavTabs('right')}
+                className="p-1 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 hover:text-white border border-stone-700 cursor-pointer shrink-0 ml-1"
+                title="Scroll navigation bar right"
+              >
+                ▶
+              </button>
             </div>
+          </div>
           )}
 
         </div>
@@ -1232,11 +1421,71 @@ const App: React.FC = () => {
           </div>
         )}
 
+        {/* SUITE VIEWPORT ANCHOR & PRO CLOSE/HIDE CONTROL BAR (Google & Microsoft Pro UX) */}
+        {!isTabHidden && activeMainTab !== "revenue" && (
+          <div id="main-suite-viewport" className="w-full max-w-7xl mx-auto mb-4 px-2 scroll-mt-24">
+            <div className="bg-[#0C1019]/95 backdrop-blur-md border border-stone-800 rounded-2xl p-3 flex items-center justify-between flex-wrap gap-3 shadow-2xl">
+              <div className="flex items-center gap-3">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
+                <div>
+                  <div className="text-[10px] text-stone-400 uppercase tracking-widest font-mono font-bold">
+                    Active Suite Viewport
+                  </div>
+                  <h3 className="text-sm font-black text-white capitalize flex items-center gap-2">
+                    <span>{activeMainTab.replace(/_/g, " ")}</span>
+                    <span className="px-2 py-0.5 bg-rose-950/80 text-rose-300 rounded text-[9px] font-mono border border-rose-800">
+                      LIVE IN FOCUS
+                    </span>
+                  </h3>
+                </div>
+              </div>
+
+              {/* Pro Controls: Close X & Show/Hide Eye */}
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setIsTabHidden(true)}
+                  className="px-3 py-1.5 bg-stone-900 hover:bg-stone-800 border border-stone-700 text-stone-300 hover:text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow"
+                  title="Hide Suite (Shows 3D Background Canvas)"
+                >
+                  <EyeOff size={14} className="text-stone-400" />
+                  <span>Hide Suite</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setActiveMainTab("revenue");
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }}
+                  className="px-3.5 py-1.5 bg-rose-600/20 hover:bg-rose-600 border border-rose-500/50 hover:border-rose-400 text-rose-200 hover:text-white rounded-xl text-xs font-black transition flex items-center gap-1.5 cursor-pointer shadow-lg"
+                  title="Close Suite & Return to Main Dashboard"
+                >
+                  <X size={14} />
+                  <span>Close Suite (✕)</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                  className="p-1.5 bg-stone-900 hover:bg-stone-800 text-stone-400 hover:text-white rounded-xl border border-stone-800 cursor-pointer"
+                  title="Scroll to Top Navigation"
+                >
+                  <ChevronUp size={16} />
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* VIEW: SREY WALLET STANDALONE TELEGRAM MINI APP (TMA) */}
         {!isTabHidden && activeMainTab === "srey_wallet" && (
           <div className="w-full flex justify-center animate-fade-in py-2">
             <div className="w-full max-w-md bg-[#07090E] rounded-3xl border border-stone-800 shadow-[0_0_50px_rgba(0,0,0,0.8)] overflow-hidden">
-              <SreyWalletApp onClose={() => setActiveMainTab("google_gemini")} />
+              <SreyWalletApp onClose={() => {
+                setActiveMainTab("revenue");
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }} />
             </div>
           </div>
         )}
@@ -1328,6 +1577,13 @@ const App: React.FC = () => {
           </div>
         )}
 
+        {/* VIEW: GOOGLE GEMINI BROWSER WORKSPACE SUITE & MULTI-ACCOUNT WORKSPACE */}
+        {!isTabHidden && activeMainTab === "google_gemini" && (
+          <div className="space-y-6 animate-fade-in">
+            <SreymaraBrowserWorkspaceSuite />
+          </div>
+        )}
+
         {/* VIEW: YOUTUBE & CINEMA 4K AI VIDEO GENERATION SUITE */}
         {!isTabHidden && activeMainTab === "cinema_video" && (
           <div className="space-y-6 animate-fade-in">
@@ -1408,10 +1664,10 @@ const App: React.FC = () => {
           </div>
         )}
 
-        {/* VIEW: DATINGARTS LUXURY MATCHMAKING & 100% HUMAN CHAT SUITE */}
+        {/* VIEW: SREY LOVE SUITE & AI MATCHMAKING ENGINE */}
         {!isTabHidden && activeMainTab === "datingarts" && (
-          <div className="space-y-6 animate-fade-in">
-            <DatingArtsMatchmakingSuite 
+          <div className="space-y-6 animate-fade-in -mx-4 -my-6">
+            <SreyLoveSuiteMatchmakingApp 
               onSwitchToEcosystem={() => setActiveMainTab("revenue")}
               onSwitchToAdmin={() => setActiveMainTab("admin_palace")}
             />
@@ -1873,6 +2129,9 @@ const App: React.FC = () => {
 
       {/* TELEGRAM MINI ECOSYSTEM & MATCHMAKING FLOATING COLLAPSIBLE WIDGET */}
       <TelegramMiniEcosystemWidget />
+
+      {/* AUTOMATED LINK ACTIVATION OVERLAY (ADMIN TELEGRAM NOTIFICATION + SHORT VIDEO / HILLTOPADS AD) */}
+      <LinkActivationOverlay />
 
       </div> {/* CLOSE LUXURIOUS BOLD BUILD FRAME */}
     </div>

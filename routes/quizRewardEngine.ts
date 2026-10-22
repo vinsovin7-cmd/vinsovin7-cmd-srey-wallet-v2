@@ -1,8 +1,8 @@
 // routes/quizRewardEngine.ts
-import { Router, Request, Response } from 'express';
-const router = Router();
+import express, { type Request, type Response } from 'express';
+const router = express.Router();
 
-export const TARGET_PAYOUT_WALLET = "UQAUc97F293041920384729103948572910293";
+export const TARGET_PAYOUT_WALLET = "UQBLz9rXlNtlzVUMuUHosRBTpUWqfoXQ8WTkyAgtbSVlbnBJ";
 export const BASE_MAX_QUIZ_REWARD_USDT = 0.50; // Increased base reward pool
 
 export interface UserQuizAnswer {

@@ -10,7 +10,7 @@ import {
   inMemoryTracks,
   inMemoryLedger,
   verifyExecutiveCredentialGate
-} from '../src/services/tonCinemaStreamService.js';
+} from '../src/services/tonCinemaStreamService.ts';
 
 const router = express.Router();
 

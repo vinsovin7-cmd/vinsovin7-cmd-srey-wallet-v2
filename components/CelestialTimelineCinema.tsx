@@ -32,10 +32,15 @@ import {
   Layers,
   ChevronDown,
   ChevronUp,
-  Cpu
+  Cpu,
+  Gift,
+  Share2,
+  Send,
+  MessageCircle
 } from 'lucide-react';
 import { TonConnectButton, useTonConnectUI, useTonWallet, useTonAddress } from '@tonconnect/ui-react';
-import { MasterCinemaPlayer, OFFICIAL_AL_JAZEERA_MIRRORS } from './MasterCinemaPlayer';
+import { MasterCinemaPlayer, OFFICIAL_AL_JAZEERA_MIRRORS, MERLIN_MIRRORS, SEEKER_MIRRORS } from './MasterCinemaPlayer';
+import { ShareToEarnUSDTSuite } from './ShareToEarnUSDTSuite';
 
 const ECOSYSTEM_ROW_1 = [
   { id: 'sreymara', title: 'Sreymara Queen AI', tag: 'LIVE MIC', color: '#00E5FF', route: '#sreymara_queen' },
@@ -69,48 +74,56 @@ const ECOSYSTEM_ROW_2 = [
 
 const PLASMA_EXECUTIVE_FEEDS = [
   { 
-    id: 'feed-2', 
+    id: 'feed-aljazeera', 
     title: 'Al Jazeera English 24/7 Live Stream (100% English Broadcast)', 
     ach: '10-ACH Cinema 4K', 
     streamUrl: 'https://www.youtube-nocookie.com/embed/gCNeDWCI0vo?autoplay=1&mute=0&controls=1&enablejsapi=1&rel=0', 
     color: '#00FF66', 
     isYouTube: true,
-    isAlJazeera: true
+    isAlJazeera: true,
+    category: '100% ENGLISH LIVE NEWS',
+    tag: 'LIVE 24/7',
+    mirrors: OFFICIAL_AL_JAZEERA_MIRRORS
   },
   { 
-    id: 'feed-1', 
-    title: 'Al Jazeera English Channel Feed (Official English Feed)', 
+    id: 'feed-merlin', 
+    title: 'Merlin (BBC Fantasy Adventure Series - Full Cinema Stream)', 
+    ach: '10-ACH BBC HD', 
+    streamUrl: 'https://www.youtube-nocookie.com/embed/fOqy-C0F4g4?autoplay=1&mute=0&controls=1&enablejsapi=1&rel=0', 
+    color: '#3B82F6', 
+    isYouTube: true,
+    isAlJazeera: false,
+    category: 'BBC MERLIN SERIES',
+    tag: 'CAMELOT MAGIC',
+    mirrors: MERLIN_MIRRORS
+  },
+  { 
+    id: 'feed-seeker', 
+    title: 'Legend of the Seeker (Epic Fantasy Sword of Truth Cinema)', 
+    ach: '10-ACH ABC HD', 
+    streamUrl: 'https://www.youtube-nocookie.com/embed/3e2o9mZ9rN0?autoplay=1&mute=0&controls=1&enablejsapi=1&rel=0', 
+    color: '#F59E0B', 
+    isYouTube: true,
+    isAlJazeera: false,
+    category: 'SWORD OF TRUTH',
+    tag: 'RICHARD & KAHLAN',
+    mirrors: SEEKER_MIRRORS
+  },
+  { 
+    id: 'feed-aljazeera-alt', 
+    title: 'Al Jazeera English Channel Feed (Official English Backup)', 
     ach: '10-ACH Ultra HD', 
     streamUrl: 'https://www.youtube.com/embed/live_stream?channel=UCNye-wNBqNL5ZzHSJj3l8Bg&autoplay=1&mute=0&controls=1&enablejsapi=1', 
     color: '#00E5FF', 
     isYouTube: true,
-    isAlJazeera: true
-  },
-  { 
-    id: 'feed-3', 
-    title: 'TON Yield Mainnet Settlement Ad Box #3', 
-    ach: '10-ACH Secure Node', 
-    streamUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4', 
-    color: '#FFD700', 
-    isYouTube: false,
-    isAlJazeera: false
-  },
-  { 
-    id: 'feed-4', 
-    title: 'Sreymara AI Voice & Micro-Earnings Ad Box #4', 
-    ach: '10-ACH Low Latency', 
-    streamUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4', 
-    color: '#A855F7', 
-    isYouTube: false,
-    isAlJazeera: false
+    isAlJazeera: true,
+    category: 'GLOBAL BACKUP FEED',
+    tag: 'DIRECT UCN',
+    mirrors: OFFICIAL_AL_JAZEERA_MIRRORS
   }
 ];
 
-const AL_JAZEERA_MIRRORS = [
-  { id: 'mirror-yt-1', name: 'Al Jazeera English HD (Primary)', url: 'https://www.youtube-nocookie.com/embed/gCNeDWCI0vo?autoplay=1&mute=0&controls=1&enablejsapi=1&rel=0' },
-  { id: 'mirror-yt-2', name: 'Al Jazeera English Feed (Backup)', url: 'https://www.youtube.com/embed/live_stream?channel=UCNye-wNBqNL5ZzHSJj3l8Bg&autoplay=1&mute=0&controls=1&enablejsapi=1' },
-  { id: 'mirror-web', name: 'Al Jazeera English Direct', url: 'https://www.youtube-nocookie.com/embed/gCNeDWCI0vo?autoplay=1&mute=0&controls=1&enablejsapi=1&rel=0' }
-];
+const AL_JAZEERA_MIRRORS = OFFICIAL_AL_JAZEERA_MIRRORS;
 
 export interface FlankingAdvert {
   id: string;
@@ -390,6 +403,38 @@ export default function CelestialTimelineCinema({ onSelectSection }: CelestialTi
   const connectedTonWallet = useTonWallet();
   const connectedTonAddress = useTonAddress();
 
+  // Share to Earn $15 USDT Modal State
+  const [showShareEarnModal, setShowShareEarnModal] = useState<boolean>(false);
+  const [shareTargetChannel, setShareTargetChannel] = useState<'cinema' | 'merlin' | 'seeker' | 'aljazeera'>('cinema');
+
+  // Deep-link URL detector for shared movie links (?movie=merlin, ?movie=seeker, ?channel=aljazeera)
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const movie = params.get('movie');
+      const channel = params.get('channel');
+      if (movie === 'merlin') {
+        const merlinFeed = PLASMA_EXECUTIVE_FEEDS.find(f => f.id === 'feed-merlin');
+        if (merlinFeed) {
+          setActiveFeed(merlinFeed);
+          setActiveMirror(0);
+        }
+      } else if (movie === 'seeker') {
+        const seekerFeed = PLASMA_EXECUTIVE_FEEDS.find(f => f.id === 'feed-seeker');
+        if (seekerFeed) {
+          setActiveFeed(seekerFeed);
+          setActiveMirror(0);
+        }
+      } else if (channel === 'aljazeera') {
+        const aljFeed = PLASMA_EXECUTIVE_FEEDS.find(f => f.id === 'feed-aljazeera');
+        if (aljFeed) {
+          setActiveFeed(aljFeed);
+          setActiveMirror(0);
+        }
+      }
+    }
+  }, []);
+
   // Blockchain Live Balance States (Fetched from TON Mainnet RPC)
   const [liveTonBalance, setLiveTonBalance] = useState<number>(0.08);
   const [liveUsdtBalance, setLiveUsdtBalance] = useState<number>(24.85);
@@ -577,20 +622,26 @@ export default function CelestialTimelineCinema({ onSelectSection }: CelestialTi
         const data = await res.json();
         if (data?.alertStatus?.alertTriggered) {
           setDataSaveStatus(`🚨 Threshold Alert Triggered! Email to ${activeUserEmail} & Telegram bot notification dispatched.`);
-        } else {
+          // Disappear automatically after exactly 10 seconds
+          setTimeout(() => {
+            setDataSaveStatus(null);
+          }, 10000);
+        } else if (explicitUserClick) {
           setDataSaveStatus(`💾 Data Saved & Retained! Exactly $${watchYieldUsdt.toFixed(3)} USDT and ${watchSeconds}s preserved in ledger.`);
+          setTimeout(() => setDataSaveStatus(null), 4000);
         }
-      } else {
+      } else if (explicitUserClick) {
         setDataSaveStatus(`💾 Data Retained! $${watchYieldUsdt.toFixed(3)} USDT stored locally on your device.`);
+        setTimeout(() => setDataSaveStatus(null), 4000);
       }
     } catch (e) {
-      setDataSaveStatus(`💾 Data Retained! $${watchYieldUsdt.toFixed(3)} USDT stored locally on your device.`);
+      if (explicitUserClick) {
+        setDataSaveStatus(`💾 Data Retained! $${watchYieldUsdt.toFixed(3)} USDT stored locally on your device.`);
+        setTimeout(() => setDataSaveStatus(null), 4000);
+      }
     }
 
     setIsSavingData(false);
-    if (explicitUserClick) {
-      setTimeout(() => setDataSaveStatus(null), 5000);
-    }
   };
 
   // REAL USDT SYNCHRONIZATION: ONLY accumulate when isPlaying is true!
@@ -884,6 +935,133 @@ export default function CelestialTimelineCinema({ onSelectSection }: CelestialTi
       </div>
 
       {/* ========================================================================= */}
+      {/* 🎁 SHARE TO EARN $15.00 USDT DIRECT TO IN-ACCOUNT ECOSYSTEM BALANCE BANNER */}
+      {/* ========================================================================= */}
+      <div className="mb-4 p-4 bg-gradient-to-r from-emerald-950/80 via-black to-[#0d1f15] border-2 border-emerald-400 rounded-2xl shadow-[0_0_35px_rgba(16,185,129,0.35)] flex items-center justify-between flex-wrap gap-3">
+        <div className="flex items-center gap-3">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-stone-950 font-black text-xl shadow-lg shrink-0">
+            <Gift size={24} className="animate-bounce" />
+          </div>
+          <div>
+            <div className="text-sm sm:text-base font-black text-white flex items-center gap-2 flex-wrap">
+              <span>SHARE TO EARN</span>
+              <span className="text-xs bg-emerald-500 text-stone-950 px-2.5 py-0.5 rounded-full font-mono font-black shadow">
+                +$15.00 USDT DIRECT DEPOSIT
+              </span>
+              <span className="text-xs text-stone-300 font-mono">
+                • Vercel Live Link
+              </span>
+            </div>
+            <p className="text-xs text-emerald-200 font-sans mt-0.5">
+              Share your live cinema link (featuring Merlin, Legend of the Seeker &amp; Al Jazeera Live) to WhatsApp, Telegram, or Twitter! Every share instantly credits <strong className="text-white">+$15.00 USDT</strong> directly to your balance.
+            </p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 flex-wrap">
+          <button
+            type="button"
+            onClick={() => {
+              setShareTargetChannel('cinema');
+              setShowShareEarnModal(true);
+            }}
+            className="px-4 py-2.5 bg-gradient-to-r from-emerald-400 via-teal-400 to-emerald-500 hover:from-emerald-300 hover:to-teal-300 text-stone-950 font-black text-xs font-mono rounded-xl shadow-[0_0_20px_rgba(16,185,129,0.6)] cursor-pointer transition-all transform active:scale-95 flex items-center gap-2"
+          >
+            <Share2 size={16} />
+            <span>CLAIM $15 USDT SHARE BONUS NOW</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              setShareTargetChannel('merlin');
+              setShowShareEarnModal(true);
+            }}
+            className="px-3 py-2 bg-stone-900 hover:bg-stone-800 text-blue-300 border border-blue-500/40 font-mono font-bold text-xs rounded-xl cursor-pointer flex items-center gap-1.5"
+            title="Share Merlin HD Stream"
+          >
+            <span>⚔️ Merlin</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              setShareTargetChannel('seeker');
+              setShowShareEarnModal(true);
+            }}
+            className="px-3 py-2 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-amber-500/40 font-mono font-bold text-xs rounded-xl cursor-pointer flex items-center gap-1.5"
+            title="Share Legend of the Seeker Stream"
+          >
+            <span>🗡️ Seeker</span>
+          </button>
+        </div>
+
+        {/* 1-Click Quick Copy Link Bar with Live Link */}
+        <div className="w-full mt-1 pt-2.5 border-t border-emerald-500/20 flex items-center justify-between flex-wrap gap-2.5">
+          <div className="flex-1 min-w-[220px] flex items-center bg-black/70 border border-emerald-500/40 rounded-xl px-3 py-1.5 text-xs font-mono">
+            <Globe size={13} className="text-sky-400 mr-2 shrink-0" />
+            <span className="text-stone-400 text-[10px] mr-1.5 uppercase font-bold">Your Share Link:</span>
+            <span className="text-emerald-300 font-bold select-all truncate text-[11px]">
+              {typeof window !== 'undefined' 
+                ? `${(localStorage.getItem('cinema_vercel_live_domain') || (window.location.origin.includes('run.app') || window.location.origin.includes('localhost') ? 'https://vinsovin7-cmd-srey-wallet-v2.vercel.app' : window.location.origin)).replace(/\/+$/, '')}/#cinema` 
+                : 'https://vinsovin7-cmd-srey-wallet-v2.vercel.app/#cinema'}
+            </span>
+          </div>
+
+          <div className="flex items-center gap-2 flex-wrap">
+            <button
+              type="button"
+              onClick={() => {
+                const liveDomain = typeof window !== 'undefined'
+                  ? (localStorage.getItem('cinema_vercel_live_domain') || (window.location.origin.includes('run.app') || window.location.origin.includes('localhost') ? 'https://vinsovin7-cmd-srey-wallet-v2.vercel.app' : window.location.origin)).replace(/\/+$/, '')
+                  : 'https://vinsovin7-cmd-srey-wallet-v2.vercel.app';
+                const link = `${liveDomain}/#cinema`;
+                navigator.clipboard.writeText(link);
+                setClaimedFeedback('✅ Live Link Copied to Clipboard! Ready to paste into WhatsApp, Telegram, or Facebook.');
+                setTimeout(() => setClaimedFeedback(null), 4000);
+              }}
+              className="px-3.5 py-1.5 bg-gradient-to-r from-emerald-400 to-teal-400 hover:from-emerald-300 hover:to-teal-300 text-stone-950 font-black text-xs font-mono rounded-xl shadow cursor-pointer transition active:scale-95 flex items-center gap-1.5"
+            >
+              <Copy size={13} />
+              <span>Copy Link</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                const liveDomain = typeof window !== 'undefined'
+                  ? (localStorage.getItem('cinema_vercel_live_domain') || (window.location.origin.includes('run.app') || window.location.origin.includes('localhost') ? 'https://vinsovin7-cmd-srey-wallet-v2.vercel.app' : window.location.origin)).replace(/\/+$/, '')
+                  : 'https://vinsovin7-cmd-srey-wallet-v2.vercel.app';
+                const link = `${liveDomain}/#cinema`;
+                const text = `🎬 Watch Merlin, Legend of the Seeker & Al Jazeera Live 24/7 non-stop in HD! Chat on Srey Love Suite + get an instant $15 USDT bonus: ${link}`;
+                window.open(`https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(text)}`, '_blank');
+              }}
+              className="px-3 py-1.5 bg-sky-600 hover:bg-sky-500 text-white font-black text-xs font-mono rounded-xl shadow cursor-pointer transition flex items-center gap-1.5"
+            >
+              <Send size={13} />
+              <span>Telegram</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                const liveDomain = typeof window !== 'undefined'
+                  ? (localStorage.getItem('cinema_vercel_live_domain') || (window.location.origin.includes('run.app') || window.location.origin.includes('localhost') ? 'https://vinsovin7-cmd-srey-wallet-v2.vercel.app' : window.location.origin)).replace(/\/+$/, '')
+                  : 'https://vinsovin7-cmd-srey-wallet-v2.vercel.app';
+                const link = `${liveDomain}/#cinema`;
+                const text = `🎬 Watch Merlin, Legend of the Seeker & Al Jazeera Live 24/7 non-stop in HD! Chat on Srey Love Suite + get an instant $15 USDT bonus: ${link}`;
+                window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
+              }}
+              className="px-3 py-1.5 bg-green-600 hover:bg-green-500 text-white font-black text-xs font-mono rounded-xl shadow cursor-pointer transition flex items-center gap-1.5"
+            >
+              <MessageCircle size={13} />
+              <span>WhatsApp</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* ========================================================================= */}
       {/* SHOCKING AUDIO ACTIVATION BANNER (80% VOLUME) */}
       {/* ========================================================================= */}
       <div className="mb-4 p-3 sm:p-4 bg-gradient-to-r from-red-950/80 via-black to-amber-950/80 border-2 border-amber-400/80 rounded-2xl shadow-xl flex items-center justify-between flex-wrap gap-3 animate-pulse">
@@ -948,6 +1126,7 @@ export default function CelestialTimelineCinema({ onSelectSection }: CelestialTi
               key={feed.id}
               onClick={() => {
                 setActiveFeed(feed);
+                setActiveMirror(0);
                 if (typeof (window as any).triggerTripleEcosystemAdFlow === 'function') {
                   (window as any).triggerTripleEcosystemAdFlow("EXECUTIVE_FEED_CLICK");
                 }
@@ -964,12 +1143,31 @@ export default function CelestialTimelineCinema({ onSelectSection }: CelestialTi
                   {feed.ach}
                 </span>
               </div>
-              <div>
+              <div className="space-y-1">
+                <div className="text-[9px] font-mono font-bold text-stone-400 tracking-wider">
+                  {(feed as any).category || 'HD BROADCAST'}
+                </div>
                 <h4 className="text-white text-xs font-bold line-clamp-2">{feed.title}</h4>
-                <p className="text-[10px] text-amber-400 mt-1 flex items-center gap-1 font-bold">
-                  <Play size={10} className="fill-amber-400 text-amber-400" />
-                  <span>{isSelected ? 'Currently Broadcasting' : 'Tap to Switch Feed'}</span>
-                </p>
+                <div className="flex items-center justify-between pt-1">
+                  <p className="text-[10px] text-amber-400 flex items-center gap-1 font-bold">
+                    <Play size={10} className="fill-amber-400 text-amber-400" />
+                    <span>{isSelected ? 'Broadcasting Live' : 'Switch Feed'}</span>
+                  </p>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      const target = feed.id.includes('merlin') ? 'merlin' : feed.id.includes('seeker') ? 'seeker' : 'aljazeera';
+                      setShareTargetChannel(target as any);
+                      setShowShareEarnModal(true);
+                    }}
+                    className="p-1 rounded-lg bg-stone-800 hover:bg-stone-700 text-emerald-400 text-[10px] flex items-center gap-1 cursor-pointer font-mono"
+                    title="Share this movie & earn $15 USDT"
+                  >
+                    <Share2 size={11} />
+                    <span>+$15</span>
+                  </button>
+                </div>
               </div>
             </div>
           );
@@ -993,11 +1191,11 @@ export default function CelestialTimelineCinema({ onSelectSection }: CelestialTi
           </div>
 
           <div className="flex items-center gap-2 flex-wrap ml-auto">
-            {/* Unstoppable Mirror Selector for Al Jazeera */}
-            {activeFeed.isAlJazeera && !isCinemaScreenHidden && (
+            {/* Mirror / Episode Selector */}
+            {!isCinemaScreenHidden && ((activeFeed as any).mirrors || AL_JAZEERA_MIRRORS).length > 0 && (
               <div className="flex items-center gap-1.5 overflow-x-auto">
-                <span className="text-[10px] font-mono text-stone-400 hidden sm:inline">Mirrors:</span>
-                {AL_JAZEERA_MIRRORS.map((mirror, mIdx) => (
+                <span className="text-[10px] font-mono text-stone-400 hidden sm:inline">Episodes/Mirrors:</span>
+                {((activeFeed as any).mirrors || AL_JAZEERA_MIRRORS).map((mirror: any, mIdx: number) => (
                   <button
                     key={mirror.id}
                     type="button"
@@ -1013,6 +1211,21 @@ export default function CelestialTimelineCinema({ onSelectSection }: CelestialTi
                 ))}
               </div>
             )}
+
+            {/* Quick Share This Feed Button */}
+            <button
+              type="button"
+              onClick={() => {
+                const target = activeFeed.id.includes('merlin') ? 'merlin' : activeFeed.id.includes('seeker') ? 'seeker' : 'aljazeera';
+                setShareTargetChannel(target as any);
+                setShowShareEarnModal(true);
+              }}
+              className="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-stone-950 font-black font-mono text-xs flex items-center gap-1 shadow transition cursor-pointer"
+              title="Share live link and earn $15 USDT"
+            >
+              <Share2 size={13} />
+              <span>SHARE &amp; EARN $15</span>
+            </button>
 
             {/* HIDE / SHOW BUTTON MATCHING USER RED ARROW SCREENSHOT */}
             <button
@@ -1214,7 +1427,7 @@ export default function CelestialTimelineCinema({ onSelectSection }: CelestialTi
           <div className="flex-1 flex flex-col items-center justify-center">
             <MasterCinemaPlayer
               title={activeFeed.title}
-              mirrors={OFFICIAL_AL_JAZEERA_MIRRORS}
+              mirrors={(activeFeed as any).mirrors || OFFICIAL_AL_JAZEERA_MIRRORS}
               initialMirrorIndex={activeMirror}
               initialVolume={volume}
               isPlaying={isPlaying}
@@ -1481,7 +1694,16 @@ export default function CelestialTimelineCinema({ onSelectSection }: CelestialTi
               <CheckCircle2 size={16} className="text-emerald-400 shrink-0" />
               <span>{dataSaveStatus}</span>
             </div>
-            <span className="text-[10px] text-stone-400 font-mono">User: {activeUserEmail}</span>
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] text-stone-400 font-mono">User: {activeUserEmail}</span>
+              <button 
+                onClick={() => setDataSaveStatus(null)}
+                className="text-stone-400 hover:text-white p-1 rounded hover:bg-emerald-900/60 transition cursor-pointer"
+                title="Dismiss Alert"
+              >
+                ✕
+              </button>
+            </div>
           </div>
         )}
 
@@ -1892,6 +2114,19 @@ export default function CelestialTimelineCinema({ onSelectSection }: CelestialTi
           </div>
         </div>
       )}
+
+      {/* SHARE TO EARN $15 USDT MODAL / DRAWER */}
+      <ShareToEarnUSDTSuite
+        isOpen={showShareEarnModal}
+        onClose={() => setShowShareEarnModal(false)}
+        onRewardClaimed={(amt) => {
+          setWatchYieldUsdt(prev => prev + amt);
+          setClaimedFeedback(`🎉 +$${amt.toFixed(2)} USDT credited directly to your Cinema & Ecosystem balance! Ready for TON withdrawal.`);
+          setTimeout(() => setClaimedFeedback(null), 5000);
+        }}
+        activeUserEmail={activeUserEmail}
+        defaultChannel={shareTargetChannel}
+      />
 
       <style>{`
         @keyframes slowStreamLeftToRight {

@@ -110,7 +110,11 @@ export const TelegramGmailBotView: React.FC<TelegramGmailBotViewProps> = ({
 
   useEffect(() => {
     fetchBotMessages();
-    const interval = setInterval(fetchBotMessages, 5000);
+    const interval = setInterval(() => {
+      if (typeof document !== "undefined" && document.visibilityState === "visible") {
+        fetchBotMessages();
+      }
+    }, 15000);
     return () => clearInterval(interval);
   }, []);
 

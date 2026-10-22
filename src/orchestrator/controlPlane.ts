@@ -1,6 +1,6 @@
-import { ExecutionState, AgentResponse } from '../types/agent';
-import { DurableStateManager } from '../services/supabase';
-import { callLLMWithResilience } from '../services/llm';
+import type { ExecutionState, AgentResponse } from '../types/agent.ts';
+import { DurableStateManager } from '../services/supabase.ts';
+import { callLLMWithResilience } from '../services/llm.ts';
 
 export async function runAgentOrchestrator(userId: string, incomingPrompt: string, existingRunId?: string): Promise<{ result: string; state: ExecutionState }> {
   let state: ExecutionState;

@@ -1,4 +1,4 @@
-import { ExecutionState } from '../types/agent';
+import type { ExecutionState } from '../types/agent.ts';
 
 // In-memory durable checkpoint store with optional persistent backing
 const inMemoryRuns = new Map<string, ExecutionState>();
