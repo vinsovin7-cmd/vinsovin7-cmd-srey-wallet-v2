@@ -44,8 +44,9 @@ import { GoogleExecutiveAccountSuite } from './components/GoogleExecutiveAccount
 import { SreymaraBrowserWorkspaceSuite } from './components/SreymaraBrowserWorkspaceSuite';
 import { ExecutiveSubSreymaraSuiteToast } from './components/ExecutiveSubSreymaraSuiteToast';
 import { LinkActivationOverlay } from './components/LinkActivationOverlay';
+import { EcosystemSearchHome } from './components/EcosystemSearchHome';
 import { googleSignIn, getActiveGoogleSession } from './src/lib/firebaseAuth';
-import { ShoppingBag, Mail, Sparkles, BookOpen, Layers, Globe, ShieldCheck, Activity, X, Eye, EyeOff, Maximize2, Minimize2, Coins, GitBranch, Wallet, Zap, Send, ExternalLink, Download, Share2, ChevronDown, ChevronUp, Grid, Smartphone, Crown, Lock, Video, Film, Users, UserCheck, Heart, Usb, Star, Mic, Bot, Building2, CreditCard, TrendingUp, MessageSquare, Radio, Cpu } from 'lucide-react';
+import { ShoppingBag, Mail, Sparkles, BookOpen, Layers, Globe, ShieldCheck, Activity, X, Eye, EyeOff, Maximize2, Minimize2, Coins, GitBranch, Wallet, Zap, Send, ExternalLink, Download, Share2, ChevronDown, ChevronUp, Grid, Smartphone, Crown, Lock, Video, Film, Users, UserCheck, Heart, Usb, Star, Mic, Bot, Building2, CreditCard, TrendingUp, MessageSquare, Radio, Cpu, Search } from 'lucide-react';
 
 const AuthorCard = ({ name, role, delay }: { name: string, role: string, delay: string }) => {
   return (
@@ -151,6 +152,7 @@ function TonWalletHeaderWidget() {
 
 const App: React.FC = () => {
   const [selectedStar, setSelectedStar] = useState<typeof SEVEN_COLOR_STARS[0] | null>(null);
+  const [showSearchHome, setShowSearchHome] = useState(false);
   const [activeMainTab, setActiveMainTab] = useState<"srey_wallet" | "google_gemini" | "community_hub" | "franz_messenger" | "web_to_app" | "adsgram_ton" | "ton_settlement" | "revenue" | "ton_wallet" | "external_api" | "cross_border_payments" | "coinbase_mcp" | "telegram_auth" | "solscan" | "sco_monetization" | "mail_ai" | "sreymara_appz" | "quantum" | "admin_palace" | "cinema_video" | "cloudflare" | "visitor_records" | "datingarts" | "litmatch">((): any => {
     if (typeof window !== "undefined") {
       const pathname = window.location.pathname.toLowerCase();
@@ -1444,6 +1446,16 @@ const App: React.FC = () => {
               <div className="flex items-center gap-2">
                 <button
                   type="button"
+                  onClick={() => setShowSearchHome(true)}
+                  className="px-3 py-1.5 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-black font-black rounded-xl text-xs flex items-center gap-1.5 cursor-pointer shadow-[0_0_15px_rgba(0,255,163,0.3)] transition-all"
+                  title="Open Ecosystem Search Home (A-Z Index)"
+                >
+                  <Search size={14} />
+                  <span>Search Home (A-Z)</span>
+                </button>
+
+                <button
+                  type="button"
                   onClick={() => setIsTabHidden(true)}
                   className="px-3 py-1.5 bg-stone-900 hover:bg-stone-800 border border-stone-700 text-stone-300 hover:text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow"
                   title="Hide Suite (Shows 3D Background Canvas)"
@@ -2132,6 +2144,19 @@ const App: React.FC = () => {
 
       {/* AUTOMATED LINK ACTIVATION OVERLAY (ADMIN TELEGRAM NOTIFICATION + SHORT VIDEO / HILLTOPADS AD) */}
       <LinkActivationOverlay />
+
+      {/* UNIVERSAL ECOSYSTEM SEARCH HOME (A-Z INDEX & ORIGIN JUMP) */}
+      {showSearchHome && (
+        <EcosystemSearchHome
+          onNavigateTab={(tab) => {
+            setActiveMainTab(tab as any);
+            setIsTabHidden(false);
+            setShowSearchHome(false);
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }}
+          onClose={() => setShowSearchHome(false)}
+        />
+      )}
 
       </div> {/* CLOSE LUXURIOUS BOLD BUILD FRAME */}
     </div>
