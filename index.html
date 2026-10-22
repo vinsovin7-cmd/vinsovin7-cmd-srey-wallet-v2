@@ -1,11 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <script src="https://cdn.jsdelivr.net/npm/buffer@6.0.3/index.min.js"></script>
     <script>
       (function() {
-        // Standalone Link Handling:
-        // Do not force automatic redirects away from ais-dev.
-        // Maintain standard standalone loading and sandbox protection.
+        if (typeof window !== 'undefined') {
+          if (!window.global) window.global = window;
+          if (!window.process) window.process = { env: { NODE_ENV: 'production' } };
+          if (typeof buffer !== 'undefined' && buffer.Buffer) {
+            window.Buffer = buffer.Buffer;
+          }
+          if (typeof globalThis !== 'undefined') {
+            if (!globalThis.global) globalThis.global = globalThis;
+            if (!globalThis.process) globalThis.process = { env: { NODE_ENV: 'production' } };
+            if (typeof buffer !== 'undefined' && buffer.Buffer) {
+              globalThis.Buffer = buffer.Buffer;
+            }
+          }
+        }
       })();
     </script>
     <script>
@@ -43,16 +55,39 @@
           window.WebSocket.CLOSED = 3;
         }
 
-        // Intercept and clean console for sandbox iframe noise, ad networks, WebGL duplicate contexts, and Tailwind CDN
+        // Intercept and clean console for TonConnect SDK noise, ad networks, iframe origin mismatch warnings, and telemetry noise
         const origWarn = console.warn;
         const origError = console.error;
         const origInfo = console.info;
         const origLog = console.log;
 
+        function safeExtractText(a) {
+          if (a === null || a === undefined) return '';
+          if (typeof a === 'string') return a;
+          if (a instanceof Error) return (a.message || '') + ' ' + (a.stack || '');
+          if (typeof a === 'object') {
+            try {
+              return JSON.stringify(a);
+            } catch (_) {
+              try {
+                return (a.name || '') + ' ' + (a.message || '') + ' ' + Object.prototype.toString.call(a);
+              } catch (__) {
+                return '';
+              }
+            }
+          }
+          return String(a);
+        }
+
         function shouldSilence(msg) {
           if (!msg) return false;
           const s = String(msg).toLowerCase();
           return (
+            s.includes('ton_connect_sdk') ||
+            s.includes('ton_connect') ||
+            s.includes('tonconnect') ||
+            s.includes('manifest') ||
+            s.includes('postmessage') ||
             s.includes('cdn.tailwindcss.com') ||
             s.includes('telegram') ||
             s.includes('richpartners') ||
@@ -68,37 +103,38 @@
             s.includes('failed to load resource') ||
             s.includes('defaultprops') ||
             s.includes('deprecat') ||
-            s.includes('ton_connect') ||
-            s.includes('tonconnect') ||
             s.includes('adsgram') ||
             s.includes('monetag') ||
             s.includes('alwingulla') ||
             s.includes('activity logged') ||
             s.includes('heartbeat') ||
-            s.includes('telemetry')
+            s.includes('telemetry') ||
+            s.includes('iframe') ||
+            s.includes('permission') ||
+            s.includes('app manifest')
           );
         }
 
         console.log = function(...args) {
-          const combined = args.map(a => (typeof a === 'object' ? JSON.stringify(a) : String(a))).join(' ');
+          const combined = args.map(safeExtractText).join(' ');
           if (shouldSilence(combined)) return;
           origLog.apply(console, args);
         };
 
         console.info = function(...args) {
-          const combined = args.map(a => (typeof a === 'object' ? JSON.stringify(a) : String(a))).join(' ');
+          const combined = args.map(safeExtractText).join(' ');
           if (shouldSilence(combined)) return;
           origInfo.apply(console, args);
         };
 
         console.warn = function(...args) {
-          const combined = args.map(a => (typeof a === 'object' ? JSON.stringify(a) : String(a))).join(' ');
+          const combined = args.map(safeExtractText).join(' ');
           if (shouldSilence(combined)) return;
           origWarn.apply(console, args);
         };
 
         console.error = function(...args) {
-          const combined = args.map(a => (typeof a === 'object' ? JSON.stringify(a) : String(a))).join(' ');
+          const combined = args.map(safeExtractText).join(' ');
           if (shouldSilence(combined)) return;
           origError.apply(console, args);
         };
@@ -118,7 +154,7 @@
 
         window.addEventListener('unhandledrejection', function(event) {
           if (event && event.reason) {
-            const reasonStr = String(event.reason?.message || event.reason);
+            const reasonStr = safeExtractText(event.reason);
             if (shouldSilence(reasonStr)) {
               event.preventDefault();
               event.stopImmediatePropagation();

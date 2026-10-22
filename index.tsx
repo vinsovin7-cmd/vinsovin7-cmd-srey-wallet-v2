@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
 */
 
+import './polyfills';
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
@@ -119,14 +120,20 @@ if (!rootElement) {
 
 const root = ReactDOM.createRoot(rootElement);
 
-// Robust HTTPS manifest resolution (handles sandboxed iframes where origin may be 'null')
-let dynamicManifestUrl = 'https://ais-dev-yri2x2xif26llxnhpuguzk-152195627325.asia-east1.run.app/tonconnect-manifest.json';
-if (typeof window !== 'undefined' && window.location) {
-  const origin = window.location.origin;
-  if (origin && origin !== 'null' && (origin.startsWith('http://') || origin.startsWith('https://'))) {
-    dynamicManifestUrl = `${origin}/tonconnect-manifest.json`;
-  }
-}
+// Robust HTTPS manifest resolution with absolute HTTPS URL and production fallback
+const getTonConnectManifestUrl = (): string => {
+  try {
+    if (typeof window !== 'undefined' && window.location) {
+      const origin = window.location.origin;
+      if (origin && origin !== 'null' && (origin.startsWith('https://') || origin.startsWith('http://'))) {
+        return `${origin}/tonconnect-manifest.json`;
+      }
+    }
+  } catch {}
+  return 'https://earnings-platform-rho.vercel.app/tonconnect-manifest.json';
+};
+
+const dynamicManifestUrl = getTonConnectManifestUrl();
 
 root.render(
   <TonConnectUIProvider manifestUrl={dynamicManifestUrl}>
