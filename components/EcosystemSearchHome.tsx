@@ -48,6 +48,32 @@ export interface EcosystemItem {
 }
 
 export const COMPREHENSIVE_ECOSYSTEM_INDEX: EcosystemItem[] = [
+  {
+    id: "dual_gateway",
+    name: "Executive Dual-URL Live Gateway & 100-Year Anti-Crash Shield",
+    category: "Sections",
+    letter: "D",
+    description: "Two independent live URLs (Owner & Brother) with 0-sec quick load, Google & Microsoft-grade silent anti-crash watchdog, and Vercel edge deployment.",
+    originTab: "dual_gateway",
+    status: "ONLINE",
+    yieldUsdt: 125000.00,
+    tags: ["2URLs", "BrotherShare", "AntiCrash", "Vercel", "0SecLoad"],
+    keywords: ["url", "urls", "2 urls", "brother", "vercel", "gateway", "live", "anti crash", "fast", "crash free", "speed", "link"],
+    icon: "Globe"
+  },
+  {
+    id: "voucher_engine",
+    name: "Automated Voucher Generation & 20-Channel Redemption Engine",
+    category: "Monetization",
+    letter: "V",
+    description: "30-minute background cron voucher seeder, SHA-256 encrypted codes, and 20-channel hot wallet redemption gateway.",
+    originTab: "voucher_engine",
+    status: "ONLINE",
+    yieldUsdt: 85400.00,
+    tags: ["Vouchers", "Redemption", "Cron", "20Channels"],
+    keywords: ["voucher", "vouchers", "code", "earn", "redeem", "cron", "20 channels", "gift card"],
+    icon: "Ticket"
+  },
   // A
   {
     id: "alphaqubit",

@@ -48,6 +48,8 @@ import { ExecutiveSubSreymaraSuiteToast } from './components/ExecutiveSubSreymar
 import { LinkActivationOverlay } from './components/LinkActivationOverlay';
 import { EcosystemSearchHome } from './components/EcosystemSearchHome';
 import { FlyingAirdropBird } from './components/FlyingAirdropBird';
+import { VoucherEngineSuite } from './components/VoucherEngineSuite';
+import { ExecutiveDualGatewayHub } from './components/ExecutiveDualGatewayHub';
 import { googleSignIn, getActiveGoogleSession } from './src/lib/firebaseAuth';
 import { ShoppingBag, Mail, Sparkles, BookOpen, Layers, Globe, ShieldCheck, Activity, X, Eye, EyeOff, Maximize2, Minimize2, Coins, GitBranch, Wallet, Zap, Send, ExternalLink, Download, Share2, ChevronDown, ChevronUp, Grid, Smartphone, Crown, Lock, Video, Film, Users, UserCheck, Heart, Usb, Star, Mic, Bot, Building2, CreditCard, TrendingUp, MessageSquare, Radio, Cpu, Search } from 'lucide-react';
 
@@ -269,13 +271,21 @@ function TonWalletHeaderWidget({ onOpenStaking }: { onOpenStaking?: () => void }
 const App: React.FC = () => {
   const [selectedStar, setSelectedStar] = useState<typeof SEVEN_COLOR_STARS[0] | null>(null);
   const [showSearchHome, setShowSearchHome] = useState(false);
-  const [activeMainTab, setActiveMainTab] = useState<"srey_wallet" | "google_gemini" | "community_hub" | "franz_messenger" | "web_to_app" | "adsgram_ton" | "ton_settlement" | "revenue" | "ton_wallet" | "external_api" | "cross_border_payments" | "coinbase_mcp" | "telegram_auth" | "solscan" | "sco_monetization" | "mail_ai" | "sreymara_appz" | "quantum" | "admin_palace" | "cinema_video" | "cloudflare" | "visitor_records" | "datingarts" | "litmatch" | "staking_vault">((): any => {
+  const [activeMainTab, setActiveMainTab] = useState<"srey_wallet" | "google_gemini" | "community_hub" | "franz_messenger" | "web_to_app" | "adsgram_ton" | "ton_settlement" | "revenue" | "ton_wallet" | "external_api" | "cross_border_payments" | "coinbase_mcp" | "telegram_auth" | "solscan" | "sco_monetization" | "mail_ai" | "sreymara_appz" | "quantum" | "admin_palace" | "cinema_video" | "cloudflare" | "visitor_records" | "datingarts" | "litmatch" | "staking_vault" | "voucher_engine" | "dual_gateway">((): any => {
     if (typeof window !== "undefined") {
       const pathname = window.location.pathname.toLowerCase();
       const hash = window.location.hash.toLowerCase();
       const href = window.location.href.toLowerCase();
       const search = window.location.search.toLowerCase();
 
+      // Dedicated Dual Live Gateways & Brother URL deep link detection
+      if (search.includes("gateway") || search.includes("dual") || search.includes("urls") || hash.includes("gateway") || hash.includes("urls") || hash.includes("brother") || pathname.includes("gateway")) {
+        return "dual_gateway";
+      }
+      // Dedicated Voucher Engine deep link detection
+      if (search.includes("voucher") || hash.includes("voucher") || pathname.includes("voucher")) {
+        return "voucher_engine";
+      }
       // Dedicated TON Staking Vault & Telegram Gifts deep link detection
       if (search.includes("staking") || search.includes("vault") || search.includes("gifts") || hash.includes("staking") || hash.includes("vault") || hash.includes("gifts") || pathname.includes("staking")) {
         return "staking_vault";
@@ -352,6 +362,7 @@ const App: React.FC = () => {
   const [showGoogleSignInModal, setShowGoogleSignInModal] = useState<boolean>(false);
   const [showAndroidInstallerModal, setShowAndroidInstallerModal] = useState<boolean>(false);
   const [showUrlNavigatorModal, setShowUrlNavigatorModal] = useState<boolean>(false);
+  const [showDualGatewayModal, setShowDualGatewayModal] = useState<boolean>(false);
   // Guarantee UI is always visible on fresh render and never permanently collapsed
   const [isTabHidden, setIsTabHidden] = useState<boolean>(false);
   const [isNavBannerHidden, setIsNavBannerHidden] = useState<boolean>(false);
@@ -447,6 +458,7 @@ const App: React.FC = () => {
       else if (hash === "visitor_records" || hash === "records") setActiveMainTab("visitor_records");
       else if (hash === "sco_monetization" || hash === "sco") setActiveMainTab("sco_monetization");
       else if (hash === "revenue" || hash === "dashboard") setActiveMainTab("revenue");
+      else if (hash.includes("voucher")) setActiveMainTab("voucher_engine");
       else if (hash === "quantum") setActiveMainTab("quantum");
     };
 
@@ -821,6 +833,16 @@ const App: React.FC = () => {
               </button>
             </div>
 
+            <button
+              type="button"
+              onClick={() => setShowDualGatewayModal(true)}
+              className="px-3.5 py-2 bg-gradient-to-r from-emerald-600 via-teal-600 to-amber-500 hover:brightness-110 text-stone-950 font-black rounded-xl text-xs flex items-center gap-2 cursor-pointer shadow-lg border border-emerald-300 transition-all active:scale-95 animate-pulse"
+              title="Open Executive 2 Live URLs (Owner & Brother) and 100-Year Anti-Crash Shield"
+            >
+              <Globe size={14} className="text-black" />
+              <span>2 Live URLs & Anti-Crash</span>
+              <span className="px-1.5 py-0.2 bg-black text-emerald-400 rounded text-[9px] font-mono font-bold">0.0s</span>
+            </button>
             <VercelDeploymentHub />
             <TonWalletHeaderWidget onOpenStaking={() => {
               setActiveMainTab("staking_vault");
@@ -863,6 +885,28 @@ const App: React.FC = () => {
                 >
                   ◀
                 </button>
+
+                {/* Executive 2 Live URLs (Owner & Brother) and 100-Year Anti-Crash Shield */}
+                <button
+                  id="btn-nav-dual-gateway"
+                  onClick={() => {
+                    setActiveMainTab("dual_gateway");
+                    setIsTabHidden(false);
+                  }}
+                  className={`px-3.5 py-2 rounded-lg text-xs font-black transition-all flex items-center gap-1.5 cursor-pointer border shadow-lg shrink-0 ${
+                    activeMainTab === "dual_gateway" && !isTabHidden
+                      ? "bg-gradient-to-r from-emerald-500 via-teal-500 to-amber-500 text-stone-950 border-emerald-300 ring-2 ring-emerald-400/50"
+                      : "bg-emerald-950/70 text-emerald-300 hover:text-white border-emerald-700/70"
+                  }`}
+                  title="Open 2 Live Production URLs (Owner & Brother) and 10,000 Bulletproof Anti-Crash System"
+                >
+                  <Globe size={14} className="text-emerald-400" />
+                  <span>2 Live URLs & Anti-Crash</span>
+                  <span className="px-1.5 py-0.2 bg-emerald-400 text-stone-950 rounded text-[9px] font-black uppercase">
+                    0-SEC
+                  </span>
+                </button>
+
               {/* Sreymara Queen Live Conversational AI Agent (Vertex AI & Gemini SDK) */}
               <button
                 id="btn-nav-sreymara-conversational"
@@ -1289,6 +1333,25 @@ const App: React.FC = () => {
                 <Globe size={15} className="text-orange-400" />
                 <span>Cloudflare earnings.ink</span>
                 <span className="px-1.5 py-0.2 bg-orange-500 text-stone-950 rounded text-[9px] font-extrabold uppercase">DNS</span>
+              </button>
+
+              {/* 🎟️ AUTOMATED VOUCHER GENERATION & 20-CHANNEL REDEMPTION ENGINE BUTTON */}
+              <button
+                id="btn-nav-voucher-engine"
+                onClick={() => {
+                  setActiveMainTab("voucher_engine");
+                  setIsTabHidden(false);
+                }}
+                className={`px-3.5 py-2 rounded-lg text-xs font-black transition-all flex items-center gap-1.5 cursor-pointer border shadow-lg ${
+                  activeMainTab === "voucher_engine" && !isTabHidden
+                    ? "bg-gradient-to-r from-amber-400 via-yellow-500 to-teal-400 text-stone-950 border-amber-200 ring-2 ring-amber-400/60 shadow-[0_0_20px_rgba(245,158,11,0.5)]"
+                    : "bg-gradient-to-r from-stone-900 via-amber-950/40 to-stone-900 text-amber-300 border-amber-500/50 hover:text-white hover:border-amber-400"
+                }`}
+                title="Voucher Generation & 20-Channel Automated Redemption Engine Center"
+              >
+                <span className="text-sm">🎟️</span>
+                <span>Voucher Engine</span>
+                <span className="px-1.5 py-0.2 bg-amber-400 text-stone-950 rounded text-[9px] font-extrabold uppercase">30m CRON</span>
               </button>
 
               {/* 👑 SREY WALLET TELEGRAM MINI APP (TMA) BUTTON */}
@@ -1857,6 +1920,20 @@ const App: React.FC = () => {
           </div>
         )}
 
+        {/* VIEW: VOUCHER GENERATION & 20-CHANNEL AUTOMATED REDEMPTION ENGINE */}
+        {!isTabHidden && activeMainTab === "voucher_engine" && (
+          <div className="space-y-6 animate-fade-in">
+            <VoucherEngineSuite />
+          </div>
+        )}
+
+        {/* VIEW: EXECUTIVE DUAL-URL LIVE GATEWAY & 100-YEAR ANTI-CRASH SHIELD */}
+        {!isTabHidden && activeMainTab === "dual_gateway" && (
+          <div className="space-y-6 animate-fade-in">
+            <ExecutiveDualGatewayHub />
+          </div>
+        )}
+
         {/* VIEW: SREYMARA APPZ ECOSYSTEM INSTALLER & EMBEDDED WORKSPACE */}
         {!isTabHidden && activeMainTab === "sreymara_appz" && (
           <div className="space-y-6 animate-fade-in">
@@ -2326,6 +2403,14 @@ const App: React.FC = () => {
             window.scrollTo({ top: 0, behavior: "smooth" });
           }}
           onClose={() => setShowSearchHome(false)}
+        />
+      )}
+
+      {/* EXECUTIVE 2 LIVE URLS & 100-YEAR ANTI-CRASH SHIELD MODAL */}
+      {showDualGatewayModal && (
+        <ExecutiveDualGatewayHub
+          isModal={true}
+          onClose={() => setShowDualGatewayModal(false)}
         />
       )}
 

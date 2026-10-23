@@ -84,3 +84,19 @@ export class DurableStateManager {
     );
   }
 }
+
+export async function getSupabaseClient() {
+  if (process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    try {
+      const { createClient } = await import('@supabase/supabase-js');
+      return createClient(
+        process.env.SUPABASE_URL,
+        process.env.SUPABASE_SERVICE_ROLE_KEY
+      );
+    } catch (e) {
+      return null;
+    }
+  }
+  return null;
+}
+

@@ -12,6 +12,8 @@
     { title: 'Legend of the Seeker — Prophecy of Kahlan', type: 'Cinema Stream', id: 'seeker', desc: 'Richard Cypher and Kahlan Amnell battle Darken Rahl.' },
     { title: 'Al Jazeera English 24/7 Live Stream', type: 'Live TV', id: 'aljazeera', desc: 'Round-the-clock global live news broadcast in HD.' },
     { title: 'TON Staking & Yield Vault (25.4% APR)', type: 'Vault', id: 'staking_vault', desc: 'Real on-chain Tonkeeper validator yield pool with 3.5% fee cut.' },
+    { title: '2 Live URLs & Anti-Crash Gateway (Brother Share)', type: 'Gateway', id: 'dual_gateway', desc: '0-sec load live URLs for owner and brother with anti-crash shield.' },
+    { title: 'Voucher Engine & 20-Channel Gateway', type: 'Monetization', id: 'voucher_engine', desc: '30-minute cron seeder, encrypted voucher codes, and 20 hot wallet channels.' },
     { title: 'Telegram Collectible Gifts Showcase', type: 'Gifts', id: 'telegram_gifts', desc: 'Srey Mara Elite Token & Imperial Dragon Amulet.' },
     { title: 'SreyWallet TMA Non-Custodial Wallet', type: 'Wallet', id: 'srey_wallet', desc: 'Web3 multi-token wallet for TON, USDT, and Jettons.' },
     { title: 'AdsGram TON Micro-Payout Studio', type: 'Monetization', id: 'adsgram_ton', desc: '80/20 video ad revenue sharing with 0.1% micro-fee.' },

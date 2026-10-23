@@ -25,6 +25,8 @@ import tonStreamRouter from "./routes/tonStreamRouter.ts";
 import securityRouter from "./routes/securityRouter.ts";
 import googleGeminiRouter from "./routes/googleGeminiRouter.ts";
 import geminiFundsRouter from "./routes/geminiFundsRouter.ts";
+import voucherRouter from "./routes/voucherRouter.ts";
+import { startVoucherCronJob } from "./src/services/voucherCron.ts";
 import { recordCinemaViewingYield } from "./src/services/geminiFundsEngine.ts";
 import { setupCinemaWebSocketServer } from "./src/services/tonCinemaStreamService.ts";
 import { TonClient, Address, fromNano, beginCell } from "@ton/ton";
@@ -55,6 +57,11 @@ app.use(aiResponseInterceptor);
 app.use(securityRouter);
 app.use(googleGeminiRouter);
 app.use("/api/gemini-funds", geminiFundsRouter);
+app.use("/api", voucherRouter);
+app.use(voucherRouter);
+
+// Initialize 30-Minute Background Voucher Generation Cron Worker
+startVoucherCronJob();
 
 // Bound Deployment URLs & Dynamic Routing
 const BOUND_DEPLOYMENT_URL = process.env.APP_URL || "https://ais-dev-yri2x2xif26llxnhpuguzk-152195627325.asia-east1.run.app";

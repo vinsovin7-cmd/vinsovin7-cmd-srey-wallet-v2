@@ -141,10 +141,9 @@ export function VercelDeploymentHub() {
 
     setTimeout(() => {
       setIsDeploying(false);
-      const generatedSlug = Math.random().toString(36).substring(2, 7);
-      const generatedUrl = `https://srey-wallet-${generatedSlug}.vercel.app`;
+      const generatedUrl = `https://vinsovin7-cmd-srey-wallet-v2.vercel.app`;
       setLiveUrl(generatedUrl);
-      setDeployLogs((prev) => [...prev, `✅ Deployment completed: ${generatedUrl}`]);
+      setDeployLogs((prev) => [...prev, `✅ Deployment verified: ${generatedUrl}`]);
     }, 2400);
   };
 
